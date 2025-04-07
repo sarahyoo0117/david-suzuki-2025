@@ -26,7 +26,7 @@ public class swerve extends SubsystemBase{
     private final Pigeon2 pig = new Pigeon2(constants.ids.pigeon, configs.canbus);
     private final SwerveDrivePoseEstimator pose_estimator; 
     private final Field2d field = new Field2d();
-    private final swerve_mech2d mech = new swerve_mech2d(3, this);
+    private final swerve_mech2d mech = new swerve_mech2d(3);
     private ChassisSpeeds desired = new ChassisSpeeds();
     
     public swerve() {
@@ -41,9 +41,9 @@ public class swerve extends SubsystemBase{
 
     @Override
     public void periodic() {
-        apply_module_states(get_module_states());
+        apply_module_states(get_desired_states());
         field.setRobotPose(get_pose2d());
-        mech.update(get_heading(), get_module_states());
+        mech.update(get_heading(), get_desired_states(), get_actual_states());
     }
     
     //separate chassis speeds for drive and steer?
@@ -75,8 +75,17 @@ public class swerve extends SubsystemBase{
         return new Pose2d(new Translation2d(desired.vxMetersPerSecond, desired.vyMetersPerSecond), get_heading());
     }
 
-    public SwerveModuleState[] get_module_states() {
+    public SwerveModuleState[] get_desired_states() {
         return constants.swerve.drive_kinematics.toSwerveModuleStates(desired);  
+    }
+
+    public SwerveModuleState[] get_actual_states() {
+        return new SwerveModuleState[] {
+            modules[0].get_state(),
+            modules[1].get_state(),
+            modules[2].get_state(),
+            modules[3].get_state()
+        };
     }
 
     public void apply_module_states(SwerveModuleState[] states) {

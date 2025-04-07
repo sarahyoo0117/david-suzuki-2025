@@ -54,7 +54,15 @@ public class swerve_module {
         return Rotation2d.fromRadians(steer.getPosition().getValue().in(Radians));
     } 
 
+    public double get_drive_velocity() {
+        return drive.getVelocity().getValueAsDouble(); 
+    }
+
     public SwerveModulePosition get_position() {
         return new SwerveModulePosition(get_distance(), get_rotation2d());
     }
+
+    public SwerveModuleState get_state() {
+        return new SwerveModuleState(get_drive_velocity(), get_rotation2d()); 
+    } 
 }

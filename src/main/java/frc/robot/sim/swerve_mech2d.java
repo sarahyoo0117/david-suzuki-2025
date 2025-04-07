@@ -10,13 +10,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.constants;
-import frc.robot.subsystems.swerve;
 
 public class swerve_mech2d {
 
-    public swerve_mech2d(double display_size, swerve swerve) {
+    public swerve_mech2d(double display_size) {
         num_modules = 4;
-        this.swerve = swerve;
         module_translations = constants.swerve.module_offsets;
         max_module_speed = constants.swerve.max_module_speed_mps;
         mech = new Mechanism2d(display_size, display_size);
@@ -47,9 +45,8 @@ public class swerve_mech2d {
         SmartDashboard.putData("swerve_mechanism2d", mech);
     }
 
-    public void update(Rotation2d pose_rotation, SwerveModuleState[] desired_states) {
+    public void update(Rotation2d pose_rotation, SwerveModuleState[] desired_states, SwerveModuleState[] actual_states) {
         rotation.setAngle(pose_rotation.getDegrees()+90.0);
-        var actual_states = swerve.get_module_states();
         for(int i = 0; i < num_modules; ++i) {
             final Translation2d trans = module_translations[i];
             final SwerveModuleState desired = desired_states[i];
@@ -62,7 +59,6 @@ public class swerve_mech2d {
     }
 
     private final int num_modules;
-    private final swerve swerve;
     private final Translation2d[] module_translations;
     private final double max_module_speed;
     private Mechanism2d mech;
