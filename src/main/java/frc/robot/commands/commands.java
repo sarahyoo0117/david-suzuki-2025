@@ -9,7 +9,7 @@ public class commands {
     public static final Command teleop_drive(swerve swerve, Translation2d inputs, double omega_input) {
         final double drive_factor = 3;
         final double steer_factor = 3;
-        return swerve.strafe_field_relative(() -> {
+        return swerve.set_speeds(() -> {
             return ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
                 inputs.getX() * drive_factor, 
                 inputs.getY() * drive_factor, 

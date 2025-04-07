@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 
 public class constants {
     public final class ids{
+        //TODO: set CAN device ids
         public static final int fr_drive = 0;
         public static final int fr_turn = 0;
         public static final int fr_abs = 0;

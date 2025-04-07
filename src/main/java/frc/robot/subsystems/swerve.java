@@ -53,7 +53,7 @@ public class swerve extends SubsystemBase{
         desired.omegaRadiansPerSecond = omega;
     } 
 
-    public Command strafe_field_relative(Supplier<ChassisSpeeds> chassis_supplier) {
+    public Command set_speeds(Supplier<ChassisSpeeds> chassis_supplier) {
         ChassisSpeeds speeds = chassis_supplier.get();
         return Commands.run(() -> {
             set_desired_speeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
