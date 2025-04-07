@@ -22,15 +22,15 @@ import frc.robot.configs.swerve.module_config;
 public class swerve_module {
     private final module_config module_config; 
     private TalonFX drive;
-    private TalonFX steer; 
+    private TalonFX turn; 
     private DutyCycleEncoder abs;
 
     public swerve_module(module_config module_config) {
         this.module_config = module_config;
         drive = new TalonFX(module_config.drive_id, configs.canbus);
-        steer = new TalonFX(module_config.steer_id, configs.canbus);
+        turn = new TalonFX(module_config.turn_id, configs.canbus);
         drive.getConfigurator().apply(configs.swerve.drive_config(module_config.drive_inverted));
-        steer.getConfigurator().apply(configs.swerve.steer_config(module_config.steer_inverted));
+        turn.getConfigurator().apply(configs.swerve.turn_config(module_config.turn_inverted));
         abs = new DutyCycleEncoder(module_config.abs_channel);
         abs.setDutyCycleRange(1 / 4096, 4096 / 4096);
         abs.setInverted(module_config.abs_inverted);
@@ -39,18 +39,18 @@ public class swerve_module {
 
     public void apply_state(SwerveModuleState state) {
         state.optimize(get_rotation2d());
-        //TODO: drive and steer voltage
+        //TODO: drive and turn voltage
         drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
-        steer.setControl(new PositionVoltage(state.angle.getRotations()));
+        turn.setControl(new PositionVoltage(state.angle.getRotations()));
     } 
 
     public void stop() {
         drive.stopMotor();
-        steer.stopMotor();
+        turn.stopMotor();
     }
 
     public void reset_turn() {
-        steer.setPosition(abs.get() - module_config.abs_offset);
+        turn.setPosition(abs.get() - module_config.abs_offset);
     }
 
     public Distance get_distance() { 
@@ -58,7 +58,7 @@ public class swerve_module {
     }
 
     public Rotation2d get_rotation2d() {
-        return Rotation2d.fromRadians(steer.getPosition().getValue().in(Radians));
+        return Rotation2d.fromRadians(turn.getPosition().getValue().in(Radians));
     } 
 
     public AngularVelocity get_drive_velocity() {
