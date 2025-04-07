@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -33,7 +34,7 @@ public class configs {
                 this.abs_inverted = abs_inverted;
             }
         }
-
+        //TODO: find encoder offsets
         public static final module_config[] module_configs = {
             new module_config(constants.ids.fr_drive, constants.ids.fr_steer, constants.swerve.module_offsets[0], 
                 InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, constants.ids.fr_abs, true, 0),
@@ -44,7 +45,7 @@ public class configs {
             new module_config(constants.ids.bl_drive, constants.ids.bl_steer, constants.swerve.module_offsets[3], 
                 InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, constants.ids.bl_abs, true, 0)
         };
-
+        //TODO:configure drive and steer motors
         public static final TalonFXConfiguration drive_config(InvertedValue inverted) {
             return new TalonFXConfiguration()
                 .withSlot0(
@@ -60,6 +61,10 @@ public class configs {
                 .withMotorOutput(
                     new MotorOutputConfigs()
                     .withInverted(inverted)
+                )
+                .withCurrentLimits(
+                    new CurrentLimitsConfigs()
+                    .withStatorCurrentLimitEnable(false) 
                 );
         }
 

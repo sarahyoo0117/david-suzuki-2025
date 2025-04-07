@@ -27,12 +27,11 @@ public class constants {
 
         public static final int pigeon = 0;
     }
-
-    public static final double wheel_diameter = Units.inchesToMeters(3.75);
-    public static final double wheel_radius = wheel_diameter / 2;
-    public static final double half_wheelbase_meters = Units.inchesToMeters(26) / 2;
-
+    
     public final class swerve {
+        public static final double wheel_diameter = Units.inchesToMeters(3.75);
+        public static final double wheel_radius = wheel_diameter / 2;
+        public static final double half_wheelbase_meters = Units.inchesToMeters(26) / 2;
         //L3 swerve
         public static final double max_module_speed_mps = FeetPerSecond.of(16.5).in(MetersPerSecond);
 

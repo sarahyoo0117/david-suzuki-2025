@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -11,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.configs;
@@ -32,12 +34,13 @@ public class swerve_module {
         abs = new DutyCycleEncoder(module_config.abs_channel);
         abs.setDutyCycleRange(1 / 4096, 4096 / 4096);
         abs.setInverted(module_config.abs_inverted);
+        reset_turn();
     }
 
     public void apply_state(SwerveModuleState state) {
         state.optimize(get_rotation2d());
         //TODO: drive and steer voltage
-        drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.wheel_radius)));
+        drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
         steer.setControl(new PositionVoltage(state.angle.getRotations()));
     } 
 
@@ -46,16 +49,24 @@ public class swerve_module {
         steer.stopMotor();
     }
 
+    public void reset_turn() {
+        steer.setPosition(abs.get() - module_config.abs_offset);
+    }
+
     public Distance get_distance() { 
-        return Meters.of(constants.wheel_radius).times(drive.getPosition().getValue().in(Radians)); 
+        return Meters.of(constants.swerve.wheel_radius).times(drive.getPosition().getValue().in(Radians)); 
     }
 
     public Rotation2d get_rotation2d() {
         return Rotation2d.fromRadians(steer.getPosition().getValue().in(Radians));
     } 
 
-    public double get_drive_velocity() {
-        return drive.getVelocity().getValueAsDouble(); 
+    public AngularVelocity get_drive_velocity() {
+        return drive.getVelocity().getValue();
+    }
+
+    public double get_drive_velocity_mps() {
+        return get_drive_velocity().in(RadiansPerSecond) * constants.swerve.wheel_radius;
     }
 
     public SwerveModulePosition get_position() {
@@ -63,6 +74,6 @@ public class swerve_module {
     }
 
     public SwerveModuleState get_state() {
-        return new SwerveModuleState(get_drive_velocity(), get_rotation2d()); 
+        return new SwerveModuleState(get_drive_velocity_mps(), get_rotation2d()); 
     } 
 }
