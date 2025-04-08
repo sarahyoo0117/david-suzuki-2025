@@ -1,16 +1,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.subsystems.swerve;;
+import frc.robot.subsystems.elevator;
+import frc.robot.subsystems.swerve;
 
 public class robot extends TimedRobot {
 
-  public final bindings bindings = new bindings();
+  public final bindings bindings;
   public final swerve swerve;
+  public final elevator elevator;
 
   public robot() {
     swerve = new swerve();
-    bindings.configureBindings(this);
+    elevator = new elevator();
+    bindings = new bindings(this);
   }
 
   @Override

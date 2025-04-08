@@ -27,6 +27,10 @@ public class constants {
         public static final int bl_abs = 3;
 
         public static final int pigeon = 0;
+
+        public static final int elevator_motor_left = 0;
+        public static final int elevator_motor_right = 0;
+        public static final int elevator_homming_sensor = 0;
     }
     
     public final class swerve {
@@ -49,5 +53,24 @@ public class constants {
             module_offsets[2],
             module_offsets[3]
         );
+    }
+
+    public final class elevator {
+        //TODO: set heights for elevator states 
+        public static enum elevator_state {
+            HOME(0.5),
+            L1(1.0),
+            L2(2.0),
+            L3(3.0),
+            L4(4.0),
+            ALGAE_INTAKE1(2.0),
+            ALGAE_INTAKE2(2.0),
+            ALGAE_NET(4.0),
+            ALGAE_PROCESSOR(1.0);
+            public final double height;
+            private elevator_state(double height) {
+                this.height = height;
+            }
+        }
     }
 }
