@@ -63,8 +63,8 @@ public class constants {
             L2(2.0),
             L3(3.0),
             L4(4.0),
-            ALGAE_INTAKE1(2.0),
-            ALGAE_INTAKE2(2.0),
+            ALGAE_REEF1(2.0),
+            ALGAE_REEF2(3.0),
             ALGAE_NET(4.0),
             ALGAE_PROCESSOR(1.0);
             public final double height;

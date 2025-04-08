@@ -11,7 +11,7 @@ import frc.robot.commands.commands;
 public final class bindings {
   //stragety: score coral -> get algae from reef -> score to net / processor
   public static elevator_state height_for_coral = elevator_state.L4;
-  public static elevator_state height_for_algae_intake = elevator_state.ALGAE_INTAKE2;
+  public static elevator_state height_for_algae_intake = elevator_state.ALGAE_REEF2;
   public static elevator_state height_for_algae_score = elevator_state.ALGAE_NET;
 
   private final robot robot;
@@ -29,6 +29,11 @@ public final class bindings {
     var ctrl_elevator_to_a = oi.cmd_xbox.a(); //L2
     var ctrl_elevator_to_x = oi.cmd_xbox.x(); //L3
     var ctrl_elevator_to_y = oi.cmd_xbox.y(); //L4
+
+    ctrl_elevator_to_b.onTrue(change_state(elevator_state.L1, elevator_state.ALGAE_REEF1, elevator_state.ALGAE_PROCESSOR));
+    ctrl_elevator_to_a.onTrue(change_state(elevator_state.L2, elevator_state.ALGAE_REEF1, elevator_state.ALGAE_PROCESSOR));
+    ctrl_elevator_to_x.onTrue(change_state(elevator_state.L3, elevator_state.ALGAE_REEF2, elevator_state.ALGAE_NET));
+    ctrl_elevator_to_y.onTrue(change_state(elevator_state.L4, elevator_state.ALGAE_REEF2, elevator_state.ALGAE_NET));
   }
 
   //TODO: LEDs
