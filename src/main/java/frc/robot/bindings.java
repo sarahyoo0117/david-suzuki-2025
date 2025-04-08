@@ -22,15 +22,16 @@ public final class bindings {
 
   private void configureBindings() {
     Supplier<Translation2d> drive_func = () -> oi.get_left_stick();
-    Supplier<Double> turn_func = () -> -oi.drive.getRightX();
+    Supplier<Double> turn_func = () -> -oi.xbox.getRightX();
     robot.swerve.setDefaultCommand(commands.teleop_drive(robot.swerve, drive_func, turn_func));
     
-    var ctrl_elevator_to_b = oi.cmd_ctrl.b(); //L1
-    var ctrl_elevator_to_a = oi.cmd_ctrl.a(); //L2
-    var ctrl_elevator_to_x = oi.cmd_ctrl.x(); //L3
-    var ctrl_elevator_to_y = oi.cmd_ctrl.y(); //L4
+    var ctrl_elevator_to_b = oi.cmd_xbox.b(); //L1
+    var ctrl_elevator_to_a = oi.cmd_xbox.a(); //L2
+    var ctrl_elevator_to_x = oi.cmd_xbox.x(); //L3
+    var ctrl_elevator_to_y = oi.cmd_xbox.y(); //L4
   }
 
+  //TODO: LEDs
   public final Command change_state(elevator_state coral, elevator_state algae_intake, elevator_state algae_score) {
       return Commands.runOnce(() -> {
           height_for_coral = coral;
