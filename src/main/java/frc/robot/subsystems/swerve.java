@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -22,7 +23,7 @@ import frc.robot.constants;
 import frc.robot.sim.swerve_mech2d;
 
 public class swerve extends SubsystemBase{
-    private final swerve_module[] modules = new swerve_module[4];
+    private swerve_module[] modules = new swerve_module[4];
     private final Pigeon2 pig = new Pigeon2(constants.ids.pigeon, configs.canbus);
     private final SwerveDrivePoseEstimator pose_estimator; 
     private final Field2d field = new Field2d();
@@ -41,9 +42,11 @@ public class swerve extends SubsystemBase{
 
     @Override
     public void periodic() {
-        apply_module_states(get_desired_states());
+        SwerveModuleState[] desired_states = constants.swerve.drive_kinematics.toSwerveModuleStates(desired);
+        apply_module_states(desired_states);
+        pig.getSimState();
+        mech.update(get_heading(), desired_states, get_modules_states());
         field.setRobotPose(get_pose2d());
-        mech.update(get_heading(), get_desired_states(), get_actual_states());
     }
     
     //separate chassis speeds for drive and steer?
@@ -73,13 +76,9 @@ public class swerve extends SubsystemBase{
             return pose_estimator.update(get_heading(), get_module_positions());
         }
         return new Pose2d(new Translation2d(desired.vxMetersPerSecond, desired.vyMetersPerSecond), get_heading());
-    }
+    } 
 
-    public SwerveModuleState[] get_desired_states() {
-        return constants.swerve.drive_kinematics.toSwerveModuleStates(desired);  
-    }
-
-    public SwerveModuleState[] get_actual_states() {
+    public SwerveModuleState[] get_modules_states() {
         return new SwerveModuleState[] {
             modules[0].get_state(),
             modules[1].get_state(),
@@ -89,6 +88,7 @@ public class swerve extends SubsystemBase{
     }
 
     public void apply_module_states(SwerveModuleState[] states) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, constants.swerve.max_module_speed_mps);
         modules[0].apply_state(states[0]);
         modules[1].apply_state(states[1]);
         modules[2].apply_state(states[2]);

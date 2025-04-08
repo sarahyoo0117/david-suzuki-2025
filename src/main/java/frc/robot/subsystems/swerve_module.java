@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
@@ -13,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.configs;
 import frc.robot.constants;
@@ -38,7 +36,7 @@ public class swerve_module {
     }
 
     public void apply_state(SwerveModuleState state) {
-        state.optimize(get_rotation2d());
+        state.optimize(get_turn_position());
         //TODO: drive and turn voltage
         drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
         turn.setControl(new PositionVoltage(state.angle.getRotations()));
@@ -53,11 +51,11 @@ public class swerve_module {
         turn.setPosition(abs.get() - module_config.abs_offset);
     }
 
-    public Distance get_distance() { 
-        return Meters.of(constants.swerve.wheel_radius).times(drive.getPosition().getValue().in(Radians)); 
+    public double get_distance_m() { 
+        return constants.swerve.wheel_radius * drive.getPosition().getValue().in(Radians); 
     }
 
-    public Rotation2d get_rotation2d() {
+    public Rotation2d get_turn_position() {
         return Rotation2d.fromRadians(turn.getPosition().getValue().in(Radians));
     } 
 
@@ -70,10 +68,10 @@ public class swerve_module {
     }
 
     public SwerveModulePosition get_position() {
-        return new SwerveModulePosition(get_distance(), get_rotation2d());
+        return new SwerveModulePosition(get_distance_m(), get_turn_position());
     }
 
     public SwerveModuleState get_state() {
-        return new SwerveModuleState(get_drive_velocity_mps(), get_rotation2d()); 
+        return new SwerveModuleState(get_drive_velocity_mps(), get_turn_position()); 
     } 
 }
