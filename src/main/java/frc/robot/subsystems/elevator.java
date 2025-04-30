@@ -6,7 +6,6 @@ import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,10 +18,10 @@ import frc.robot.sim.elevator_mech2d;
 public class elevator extends SubsystemBase {
     private final TalonFX motor_left = new TalonFX(configs.ids.elevator_motor_left, configs.canbus);
     private final TalonFX motor_right = new TalonFX(configs.ids.elevator_motor_right, configs.canbus);
-    private final DigitalInput homming_sensor = new DigitalInput(configs.ids.elevator_homming_sensor); //??
     private elevator_state target_state;
     MotionMagicVoltage position_request = new MotionMagicVoltage(0);
     private elevator_mech2d sim = new elevator_mech2d(3, 3);
+
     @Override
     public void periodic() {
         ControlRequest elevator_req = position_request.withPosition(0);

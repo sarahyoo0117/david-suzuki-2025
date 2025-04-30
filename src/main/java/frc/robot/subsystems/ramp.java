@@ -16,10 +16,10 @@ public class ramp extends SubsystemBase {
     private final TalonFX intake = new TalonFX(configs.ids.ramp_intake); 
     //TODO: use Duty Cycle for lidars
     private final DigitalInput lidar_edge = new DigitalInput(configs.ids.ramp_lidar_edge);
-    private final DigitalInput lidar_middle =new DigitalInput(configs.ids.ramp_lidar_middle);
+    private final DigitalInput lidar_middle = new DigitalInput(configs.ids.ramp_lidar_middle);
     private boolean coral_homed = false, has_coral = false;
     private VelocityVoltage output_req = new VelocityVoltage(0);
-    //private AngularVelocity desired_vel = DegreesPerSecond.of(0); honestly why do we need desired 
+    private AngularVelocity desired_vel = DegreesPerSecond.of(0);  
 
     @Override
     public void periodic() {
