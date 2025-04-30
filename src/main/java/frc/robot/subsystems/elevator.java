@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.configs;
 import frc.robot.constants;
 import frc.robot.constants.elevator.elevator_state;
+import frc.robot.sim.elevator_mech2d;
 
 //TODO: homming cmd 
 //TODO: elevator sim 
@@ -20,7 +23,7 @@ public class elevator extends SubsystemBase {
     private final DigitalInput homming_sensor = new DigitalInput(configs.ids.elevator_homming_sensor);
     private elevator_state target_state;
     MotionMagicVoltage position_request = new MotionMagicVoltage(0);
-
+    private elevator_mech2d sim = new elevator_mech2d(3, 3);
     @Override
     public void periodic() {
         ControlRequest elevator_req = position_request.withPosition(0);
@@ -31,6 +34,7 @@ public class elevator extends SubsystemBase {
 
         motor_left.setControl(elevator_req);
         motor_right.setControl(elevator_req);
+        sim.set_elevator_pos(position_request.getPositionMeasure().in(Degrees));
     }
     
     public void set_target_state(elevator_state state) {
