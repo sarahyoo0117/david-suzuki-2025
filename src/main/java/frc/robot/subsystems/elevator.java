@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Meters;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -29,6 +30,7 @@ public class elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
+        BaseStatusSignal.refreshAll(position_signal, velocity_signal);
         ControlRequest elevator_req = position_request.withPosition(0);
 
         if (target_state != null) {

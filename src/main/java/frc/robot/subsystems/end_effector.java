@@ -3,10 +3,13 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,12 +24,16 @@ public class end_effector extends SubsystemBase {
     private boolean lidar_sees_coral = false;
     private VelocityVoltage roller_output_req = new VelocityVoltage(0);
     private PositionVoltage pivot_output_req = new PositionVoltage(0); 
+    //TODO: what's the use of target variables
     private AngularVelocity target_roller_velocity = RotationsPerSecond.of(0); 
     private AngularVelocity target_pivot_velocity = DegreesPerSecond.of(0); 
+    private StatusSignal<Angle> pivot_position_signal = pivot.getPosition();
 
     @Override
     public void periodic() {
+        BaseStatusSignal.refreshAll(pivot_position_signal);
         lidar_sees_coral = lidar.get();
+        elevator.sim.update_wrist_angle(pivot_output_req.getPositionMeasure(), pivot_position_signal.getValue());
     }
 
     public boolean lidar_sees_coral() {
