@@ -34,6 +34,12 @@ public class configs {
         public static final int elevator_motor_left = 12;
         public static final int elevator_motor_right = 13;
         public static final int elevator_homming_sensor = 0;
+
+        public static final int end_effector_roller = 0;
+
+        public static final int ramp_intake = 0;
+        public static final int ramp_lidar_edge = 0;
+        public static final int ramp_lidar_middle = 0;
     }
 
     public final class swerve {

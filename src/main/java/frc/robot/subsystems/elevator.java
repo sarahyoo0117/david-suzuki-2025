@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.configs;
-import frc.robot.constants;
 import frc.robot.constants.elevator.elevator_state;
 import frc.robot.sim.elevator_mech2d;
 
@@ -20,7 +19,7 @@ import frc.robot.sim.elevator_mech2d;
 public class elevator extends SubsystemBase {
     private final TalonFX motor_left = new TalonFX(configs.ids.elevator_motor_left, configs.canbus);
     private final TalonFX motor_right = new TalonFX(configs.ids.elevator_motor_right, configs.canbus);
-    private final DigitalInput homming_sensor = new DigitalInput(configs.ids.elevator_homming_sensor);
+    private final DigitalInput homming_sensor = new DigitalInput(configs.ids.elevator_homming_sensor); //??
     private elevator_state target_state;
     MotionMagicVoltage position_request = new MotionMagicVoltage(0);
     private elevator_mech2d sim = new elevator_mech2d(3, 3);
@@ -49,6 +48,10 @@ public class elevator extends SubsystemBase {
     public void zero() {
         motor_left.setPosition(0);
         motor_right.setPosition(0);
+    }
+
+    public Command home() {
+        return cmd_set_state(elevator_state.HOME).andThen(Commands.idle(this));
     }
 
     public Command cmd_set_state(elevator_state state) {
