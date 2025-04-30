@@ -15,6 +15,7 @@ public final class bindings {
   public static elevator_state height_for_algae_score = elevator_state.ALGAE_NET;
 
   private final robot robot;
+
   public bindings(robot robot) {
     this.robot = robot;
     configureBindings();

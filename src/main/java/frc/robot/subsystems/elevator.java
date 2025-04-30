@@ -15,9 +15,9 @@ import frc.robot.constants.elevator.elevator_state;
 //TODO: homming cmd 
 //TODO: elevator sim 
 public class elevator extends SubsystemBase {
-    private final TalonFX motor_left = new TalonFX(constants.ids.elevator_motor_left, configs.canbus);
-    private final TalonFX motor_right = new TalonFX(constants.ids.elevator_motor_right, configs.canbus);
-    private final DigitalInput homming_sensor = new DigitalInput(constants.ids.elevator_homming_sensor);
+    private final TalonFX motor_left = new TalonFX(configs.ids.elevator_motor_left, configs.canbus);
+    private final TalonFX motor_right = new TalonFX(configs.ids.elevator_motor_right, configs.canbus);
+    private final DigitalInput homming_sensor = new DigitalInput(configs.ids.elevator_homming_sensor);
     private elevator_state target_state;
     MotionMagicVoltage position_request = new MotionMagicVoltage(0);
 

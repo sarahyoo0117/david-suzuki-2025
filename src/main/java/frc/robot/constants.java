@@ -8,30 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 public class constants {
-    public final class ids{
-        //TODO: set CAN device ids
-        public static final int fr_drive = 0;
-        public static final int fr_turn = 0;
-        public static final int fr_abs = 0;
-
-        public static final int fl_drive = 0;
-        public static final int fl_turn = 0;
-        public static final int fl_abs = 1;
-
-        public static final int br_drive = 0;
-        public static final int br_turn = 0;
-        public static final int br_abs = 2;
-
-        public static final int bl_drive = 0;
-        public static final int bl_turn = 0;
-        public static final int bl_abs = 3;
-
-        public static final int pigeon = 0;
-
-        public static final int elevator_motor_left = 0;
-        public static final int elevator_motor_right = 0;
-        public static final int elevator_homming_sensor = 0;
-    }
     
     public final class swerve {
         public static final double wheel_diameter = Units.inchesToMeters(3.75);

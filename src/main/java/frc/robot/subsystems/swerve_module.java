@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.configs;
 import frc.robot.constants;
 import frc.robot.configs.swerve.module_config;
@@ -65,6 +66,10 @@ public class swerve_module {
 
     public double get_drive_velocity_mps() {
         return get_drive_velocity().in(RadiansPerSecond) * constants.swerve.wheel_radius;
+    }
+
+    public double get_abs_raw() {
+        return abs.get();
     }
 
     public SwerveModulePosition get_position() {

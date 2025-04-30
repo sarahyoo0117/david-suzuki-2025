@@ -23,8 +23,8 @@ import frc.robot.constants;
 import frc.robot.sim.swerve_mech2d;
 
 public class swerve extends SubsystemBase{
-    private swerve_module[] modules = new swerve_module[4];
-    private final Pigeon2 pig = new Pigeon2(constants.ids.pigeon, configs.canbus);
+    private final swerve_module[] modules = new swerve_module[4];
+    private final Pigeon2 pig = new Pigeon2(configs.ids.pigeon, configs.canbus);
     private final SwerveDrivePoseEstimator pose_estimator; 
     private final Field2d field = new Field2d();
     private final swerve_mech2d mech = new swerve_mech2d(3);
@@ -38,6 +38,12 @@ public class swerve extends SubsystemBase{
         pose_estimator = new SwerveDrivePoseEstimator(constants.swerve.drive_kinematics, get_heading(), get_module_positions(), new Pose2d());
         mech.init();
         SmartDashboard.putData("field2d", field);
+        SmartDashboard.putNumberArray("modules_raw_abs", new double[] { 
+            modules[0].get_abs_raw(), 
+            modules[1].get_abs_raw(),
+            modules[2].get_abs_raw(),
+            modules[3].get_abs_raw(),
+        });
     } 
 
     @Override

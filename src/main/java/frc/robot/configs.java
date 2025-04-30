@@ -11,6 +11,31 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class configs {
     public static final String canbus = "canbus";        
 
+    public final class ids{
+        //TODO: set CAN device ids
+        public static final int fr_drive = 8;
+        public static final int fr_turn = 9;
+        public static final int fr_abs = 7;
+
+        public static final int fl_drive = 6;
+        public static final int fl_turn = 3;
+        public static final int fl_abs = 6;
+
+        public static final int br_drive = 2;
+        public static final int br_turn = 4;
+        public static final int br_abs = 9;
+
+        public static final int bl_drive = 7;
+        public static final int bl_turn = 5;
+        public static final int bl_abs = 8;
+
+        public static final int pigeon = 10;
+
+        public static final int elevator_motor_left = 12;
+        public static final int elevator_motor_right = 13;
+        public static final int elevator_homming_sensor = 0;
+    }
+
     public final class swerve {
         public static final class module_config {
             public final int drive_id;
@@ -36,14 +61,14 @@ public class configs {
         }
         //TODO: find encoder offsets
         public static final module_config[] module_configs = {
-            new module_config(constants.ids.fr_drive, constants.ids.fr_turn, constants.swerve.module_offsets[0], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, constants.ids.fr_abs, true, 0),
-            new module_config(constants.ids.fl_drive, constants.ids.fl_turn, constants.swerve.module_offsets[1], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, constants.ids.fl_abs, true, 0),
-            new module_config(constants.ids.br_drive, constants.ids.br_turn, constants.swerve.module_offsets[2], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, constants.ids.br_abs, true, 0),
-            new module_config(constants.ids.bl_drive, constants.ids.bl_turn, constants.swerve.module_offsets[3], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, constants.ids.bl_abs, true, 0)
+            new module_config(ids.fr_drive, ids.fr_turn, constants.swerve.module_offsets[0], 
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, ids.fr_abs, true, 0),
+            new module_config(ids.fl_drive, ids.fl_turn, constants.swerve.module_offsets[1], 
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, ids.fl_abs, true, 0),
+            new module_config(ids.br_drive, ids.br_turn, constants.swerve.module_offsets[2], 
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, ids.br_abs, true, 0),
+            new module_config(ids.bl_drive, ids.bl_turn, constants.swerve.module_offsets[3], 
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, ids.bl_abs, true, 0)
         };
         //TODO:configure drive and turn motors
         public static final TalonFXConfiguration drive_config(InvertedValue inverted) {
