@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.constants;
 
 public class swerve_mech2d {
-
+    //TODO: fix swerve sim not updating module states issue
     public swerve_mech2d(double display_size) {
         num_modules = 4;
         module_translations = constants.swerve.module_offsets;

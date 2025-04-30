@@ -21,8 +21,8 @@ public class end_effector extends SubsystemBase {
     private boolean lidar_sees_coral = false;
     private VelocityVoltage roller_output_req = new VelocityVoltage(0);
     private PositionVoltage pivot_output_req = new PositionVoltage(0); 
-    private AngularVelocity target_roller_speed = RotationsPerSecond.of(0); 
-    private AngularVelocity target_pivot_speed = DegreesPerSecond.of(0); 
+    private AngularVelocity target_roller_velocity = RotationsPerSecond.of(0); 
+    private AngularVelocity target_pivot_velocity = DegreesPerSecond.of(0); 
 
     @Override
     public void periodic() {
@@ -34,12 +34,12 @@ public class end_effector extends SubsystemBase {
     }
 
     public void set_roller_speed(AngularVelocity speed) {
-        target_roller_speed = speed;
+        target_roller_velocity = speed;
         roller.setControl(roller_output_req.withVelocity(speed));
     }
 
     public void set_pivot_speed(AngularVelocity speed) {
-       target_pivot_speed = speed; 
+       target_pivot_velocity = speed; 
        pivot.setControl(pivot_output_req.withVelocity(speed));
     }
 

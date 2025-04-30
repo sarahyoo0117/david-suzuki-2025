@@ -55,7 +55,6 @@ public class swerve extends SubsystemBase{
         field.setRobotPose(get_pose2d());
     }
     
-    //separate chassis speeds for drive and steer?
     public void set_desired_speeds(double x_speed, double y_speed, double omega) {
         desired.vxMetersPerSecond = x_speed;
         desired.vyMetersPerSecond = y_speed;

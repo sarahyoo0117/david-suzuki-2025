@@ -1,11 +1,13 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.FeetPerSecond;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Distance;
 
 public class constants {
     
@@ -34,17 +36,17 @@ public class constants {
     public final class elevator {
         //TODO: set heights for elevator states 
         public static enum elevator_state {
-            HOME(0.5),
-            L1(1.0),
-            L2(2.0),
-            L3(3.0),
-            L4(4.0),
-            ALGAE_REEF1(2.0),
-            ALGAE_REEF2(3.0),
-            ALGAE_NET(4.0),
-            ALGAE_PROCESSOR(1.0);
-            public final double height;
-            private elevator_state(double height) {
+            HOME(Meters.of(0.0)),
+            L1(Meters.of(1.0)),
+            L2(Meters.of(2.0)),
+            L3(Meters.of(3.0)),
+            L4(Meters.of(4.0)),
+            ALGAE_REEF1(Meters.of(2.0)),
+            ALGAE_REEF2(Meters.of(3.0)),
+            ALGAE_NET(Meters.of(4.0)),
+            ALGAE_PROCESSOR(Meters.of(1.0));
+            public final Distance height;
+            private elevator_state(Distance height) {
                 this.height = height;
             }
         }
