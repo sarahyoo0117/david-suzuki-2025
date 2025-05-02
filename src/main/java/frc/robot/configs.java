@@ -38,7 +38,7 @@ public class configs {
         public static final int end_effector_roller = 16;
         public static final int end_effector_pivot = 15;
         
-        public static final int ramp_intake = 14;
+        public static final int ramp_roller = 14;
         public static final int ramp_lidar_edge = 4;
         public static final int ramp_lidar_middle = 3;
     }

@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.configs;
 
 public class ramp extends SubsystemBase {
-    private final TalonFX intake = new TalonFX(configs.ids.ramp_intake); 
+    private final TalonFX intake = new TalonFX(configs.ids.ramp_roller); 
     private final DigitalInput lidar_edge = new DigitalInput(configs.ids.ramp_lidar_edge);
     private final DigitalInput lidar_middle = new DigitalInput(configs.ids.ramp_lidar_middle);
     private boolean coral_homed = false, has_coral = false;
