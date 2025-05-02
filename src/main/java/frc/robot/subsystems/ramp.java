@@ -17,8 +17,7 @@ public class ramp extends SubsystemBase {
     private final DigitalInput lidar_edge = new DigitalInput(configs.ramp_lidar_edge);
     private final DigitalInput lidar_middle = new DigitalInput(configs.ramp_lidar_middle);
     private boolean coral_homed = false, has_coral = false;
-    private VelocityVoltage output_req = new VelocityVoltage(0);
-    private AngularVelocity desired_vel = DegreesPerSecond.of(0);  
+    private VelocityVoltage velocity_output_req = new VelocityVoltage(0);
 
     @Override
     public void periodic() {
@@ -30,21 +29,24 @@ public class ramp extends SubsystemBase {
         }
     }
 
-    public Command set(AngularVelocity speed) {
+    public void set(AngularVelocity speed) {
+        roller.setControl(velocity_output_req.withVelocity(speed));
+    }
+
+    public Command cmd_set(AngularVelocity speed) {
         return Commands.runOnce(() -> {
-           // desired_vel = speed;
-            roller.setControl(output_req.withVelocity(speed));
+            set(speed);
         }, this);
     }
 
     public Command feed() {
-        return set(DegreesPerSecond.of(1));
+        return cmd_set(DegreesPerSecond.of(1));
     }
 
     public Command unjam() {
         has_coral = false;
         coral_homed = false;
-        return set(DegreesPerSecond.of(-1));
+        return cmd_set(DegreesPerSecond.of(-1));
     }
 
     public boolean has_coral() {
