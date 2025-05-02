@@ -50,6 +50,7 @@ public class zapster extends TalonFX {
         return this;
     }
 
+    //TODO: sim configuration
     public zapster with_config(TalonFXConfiguration config) {
        sim_pids[0].setPID(config.Slot0.kP, config.Slot0.kI, config.Slot0.kD); 
        sim_ffs[0] = new SimpleMotorFeedforward(config.Slot0.kS, config.Slot0.kV);

@@ -20,8 +20,8 @@ import frc.robot.sim.elevator_mech2d;
 //TODO: homming cmd 
 //TODO: elevator sim 
 public class elevator extends SubsystemBase {
-    private final TalonFX motor_left = new TalonFX(configs.ids.elevator_motor_left, configs.canbus);
-    private final TalonFX motor_right = new TalonFX(configs.ids.elevator_motor_right, configs.canbus);
+    private final TalonFX motor_left = new TalonFX(configs.can_elevator_motor_left.id, configs.can_elevator_motor_left.canbus);
+    private final TalonFX motor_right = new TalonFX(configs.can_elevator_motor_right.id, configs.can_elevator_motor_right.canbus);
     MotionMagicVoltage position_request = new MotionMagicVoltage(0);
     private StatusSignal<AngularVelocity> velocity_signal = motor_left.getVelocity(); 
     private StatusSignal<Angle> position_signal = motor_left.getPosition();

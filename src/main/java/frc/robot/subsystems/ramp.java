@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.configs;
 
 public class ramp extends SubsystemBase {
-    private final TalonFX intake = new TalonFX(configs.ids.ramp_roller); 
-    private final DigitalInput lidar_edge = new DigitalInput(configs.ids.ramp_lidar_edge);
-    private final DigitalInput lidar_middle = new DigitalInput(configs.ids.ramp_lidar_middle);
+    private final TalonFX roller = new TalonFX(configs.can_ramp_roller.id, configs.can_ramp_roller.canbus); 
+    private final DigitalInput lidar_edge = new DigitalInput(configs.ramp_lidar_edge);
+    private final DigitalInput lidar_middle = new DigitalInput(configs.ramp_lidar_middle);
     private boolean coral_homed = false, has_coral = false;
     private VelocityVoltage output_req = new VelocityVoltage(0);
     private AngularVelocity desired_vel = DegreesPerSecond.of(0);  
@@ -33,7 +33,7 @@ public class ramp extends SubsystemBase {
     public Command set(AngularVelocity speed) {
         return Commands.runOnce(() -> {
            // desired_vel = speed;
-            intake.setControl(output_req.withVelocity(speed));
+            roller.setControl(output_req.withVelocity(speed));
         }, this);
     }
 

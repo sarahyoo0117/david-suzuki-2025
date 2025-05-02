@@ -25,8 +25,8 @@ public class swerve_module {
 
     public swerve_module(module_config module_config) {
         this.module_config = module_config;
-        drive = new TalonFX(module_config.drive_id, configs.canbus);
-        turn = new TalonFX(module_config.turn_id, configs.canbus);
+        drive = new TalonFX(module_config.can_drive.id, module_config.can_drive.canbus);
+        turn = new TalonFX(module_config.can_turn.id, module_config.can_turn.canbus);
         drive.getConfigurator().apply(configs.swerve.drive_config(module_config.drive_inverted));
         turn.getConfigurator().apply(configs.swerve.turn_config(module_config.turn_inverted));
         abs = new DutyCycleEncoder(module_config.abs_channel);

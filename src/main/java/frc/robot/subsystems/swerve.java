@@ -24,7 +24,7 @@ import frc.robot.sim.swerve_mech2d;
 
 public class swerve extends SubsystemBase{
     private final swerve_module[] modules = new swerve_module[4];
-    private final Pigeon2 pig = new Pigeon2(configs.ids.pigeon, configs.canbus);
+    private final Pigeon2 pig = new Pigeon2(configs.can_pigeon.id, configs.can_pigeon.canbus);
     private final SwerveDrivePoseEstimator pose_estimator; 
     private final Field2d field = new Field2d();
     private final swerve_mech2d mech = new swerve_mech2d(3);

@@ -18,9 +18,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.configs;
 
 public class end_effector extends SubsystemBase {
-    private final TalonFX roller = new TalonFX(configs.ids.end_effector_roller, configs.canbus); 
-    private final TalonFX pivot = new TalonFX(configs.ids.end_effector_pivot, configs.canbus);
-    private DigitalInput lidar = new DigitalInput(configs.ids.end_effector_lidar);
+    private final TalonFX roller = new TalonFX(configs.can_end_effector_roller.id, configs.can_end_effector_roller.canbus); 
+    private final TalonFX pivot = new TalonFX(configs.can_end_effector_pivot.id, configs.can_end_effector_pivot.canbus);
+    private DigitalInput lidar = new DigitalInput(configs.end_effector_lidar);
     private boolean lidar_sees_coral = false;
     private VelocityVoltage roller_output_req = new VelocityVoltage(0);
     private PositionVoltage pivot_output_req = new PositionVoltage(0); 
