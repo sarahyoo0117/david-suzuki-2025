@@ -26,6 +26,7 @@ public class elevator extends SubsystemBase {
     private StatusSignal<AngularVelocity> velocity_signal = motor_left.getVelocity(); 
     private StatusSignal<Angle> position_signal = motor_left.getPosition();
     private elevator_state target_state;
+
     public static final elevator_mech2d sim = new elevator_mech2d(3, 3); //TODO: elevator sim
 
     @Override

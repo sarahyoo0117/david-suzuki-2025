@@ -18,27 +18,27 @@ import frc.robot.constants;
 import frc.robot.configs.swerve.module_config;
 
 public class swerve_module {
-    private final module_config module_config; 
+    private final module_config config; 
     private TalonFX drive;
     private TalonFX turn; 
     private DutyCycleEncoder abs;
 
-    public swerve_module(module_config module_config) {
-        this.module_config = module_config;
-        drive = new TalonFX(module_config.can_drive.id, module_config.can_drive.canbus);
-        turn = new TalonFX(module_config.can_turn.id, module_config.can_turn.canbus);
-        drive.getConfigurator().apply(configs.swerve.drive_config(module_config.drive_inverted));
-        turn.getConfigurator().apply(configs.swerve.turn_config(module_config.turn_inverted));
-        abs = new DutyCycleEncoder(module_config.abs_channel);
+    public swerve_module(module_config config) {
+        this.config = config;
+        drive = new TalonFX(config.can_drive.id, config.can_drive.canbus);
+        turn = new TalonFX(config.can_turn.id, config.can_turn.canbus);
+        drive.getConfigurator().apply(configs.swerve.drive_config(config.drive_inverted));
+        turn.getConfigurator().apply(configs.swerve.turn_config(config.turn_inverted));
+        abs = new DutyCycleEncoder(config.abs_channel);
         abs.setDutyCycleRange(1 / 4096, 4096 / 4096);
-        abs.setInverted(module_config.abs_inverted);
+        abs.setInverted(config.abs_inverted);
         reset_turn();
     }
 
     public void apply_state(SwerveModuleState state) {
         state.optimize(get_turn_position());
         //TODO: drive and turn voltage
-        drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
+        drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius * 2 * Math.PI)));
         turn.setControl(new PositionVoltage(state.angle.getRotations()));
     } 
 
@@ -48,7 +48,7 @@ public class swerve_module {
     }
 
     public void reset_turn() {
-        turn.setPosition(abs.get() - module_config.abs_offset);
+        turn.setPosition(abs.get() - config.abs_offset);
     }
 
     public double get_distance_m() { 
