@@ -38,14 +38,8 @@ public class swerve extends SubsystemBase{
         pose_estimator = new SwerveDrivePoseEstimator(constants.swerve.drive_kinematics, get_heading(), get_module_positions(), new Pose2d());
         mech.init();
         SmartDashboard.putData("field2d", field);
-        SmartDashboard.putNumberArray("modules_raw_abs", new double[] { 
-            modules[0].get_abs_raw(), 
-            modules[1].get_abs_raw(),
-            modules[2].get_abs_raw(),
-            modules[3].get_abs_raw(),
-        });
     } 
-
+    
     @Override
     public void periodic() {
         SwerveModuleState[] desired_states = constants.swerve.drive_kinematics.toSwerveModuleStates(desired);
@@ -53,6 +47,12 @@ public class swerve extends SubsystemBase{
         pig.getSimState();
         mech.update(get_heading(), desired_states, get_modules_states());
         field.setRobotPose(get_pose2d());
+        SmartDashboard.putNumberArray("modules_raw_abs", new double[] { 
+            modules[0].get_abs_raw(), 
+            modules[1].get_abs_raw(),
+            modules[2].get_abs_raw(),
+            modules[3].get_abs_raw(),
+        });
     }
     
     public void set_desired_speeds(double x_speed, double y_speed, double omega) {
@@ -62,13 +62,22 @@ public class swerve extends SubsystemBase{
     } 
 
     public Command set_speeds(Supplier<ChassisSpeeds> chassis_supplier) {
-        ChassisSpeeds speeds = chassis_supplier.get();
         return Commands.run(() -> {
+            ChassisSpeeds speeds = chassis_supplier.get();
             set_desired_speeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
         }, this);
     }
 
-    public void reset_heading() {
+    public Command zero() {
+        return Commands.runOnce(() -> {
+            modules[0].zero();
+            modules[1].zero();
+            modules[2].zero();
+            modules[3].zero();
+        }, this);
+    }
+
+    public void zero_heading() {
         pig.reset();
     }
     

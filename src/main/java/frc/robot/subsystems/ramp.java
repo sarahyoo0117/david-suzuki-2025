@@ -29,24 +29,24 @@ public class ramp extends SubsystemBase {
         }
     }
 
-    public void set(AngularVelocity speed) {
+    public void set_roller(AngularVelocity speed) {
         roller.setControl(velocity_output_req.withVelocity(speed));
     }
 
-    public Command cmd_set(AngularVelocity speed) {
+    public Command cmd_set_roller(AngularVelocity speed) {
         return Commands.runOnce(() -> {
-            set(speed);
+            set_roller(speed);
         }, this);
     }
 
     public Command feed() {
-        return cmd_set(DegreesPerSecond.of(1));
+        return cmd_set_roller(DegreesPerSecond.of(10));
     }
 
     public Command unjam() {
         has_coral = false;
         coral_homed = false;
-        return cmd_set(DegreesPerSecond.of(-1));
+        return cmd_set_roller(DegreesPerSecond.of(-10));
     }
 
     public boolean has_coral() {

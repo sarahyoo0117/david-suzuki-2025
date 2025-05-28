@@ -1,6 +1,12 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -9,7 +15,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class configs {
-    public static final String canbus = "canbus";        
+    public static final String canbus = "canivore";        
+    public static final String canbus_rio = "rio";
 
     public static final class can {
         public String canbus;    
@@ -41,11 +48,11 @@ public class configs {
     public static final can can_elevator_motor_left = new can(12, canbus);
     public static final can can_elevator_motor_right = new can(13, canbus);
 
-    public static final can can_end_effector_roller = new can(16, canbus);
-    public static final can can_end_effector_pivot = new can(15, canbus);
+    public static final can can_end_effector_roller = new can(16, canbus_rio);
+    public static final can can_end_effector_pivot = new can(15, canbus_rio);
     public static final int end_effector_lidar = 5;
 
-    public static final can can_ramp_roller = new can(14, canbus);
+    public static final can can_ramp_roller = new can(14, canbus_rio);
     public static final int ramp_lidar_edge = 4;
     public static final int ramp_lidar_middle = 3;
 
@@ -75,26 +82,21 @@ public class configs {
         //TODO: find encoder offsets
         public static final module_config[] module_configs = {
             new module_config(can_swerve_fr_drive, can_swerve_fr_turn, constants.swerve.module_offsets[0], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fr_abs, true, 0),
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fr_abs, true, 0.726),
             new module_config(can_swerve_fl_drive, can_swerve_fl_turn, constants.swerve.module_offsets[1], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fl_abs, true, 0),
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fl_abs, true, 0.086),
             new module_config(can_swerve_br_drive, can_swerve_br_turn, constants.swerve.module_offsets[2], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_br_abs, true, 0),
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_br_abs, true, 0.947),
             new module_config(can_swerve_bl_drive, can_swerve_bl_turn, constants.swerve.module_offsets[3], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_bl_abs, true, 0)
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_bl_abs, true, 0.575)
         };
-        //TODO:configure drive and turn motors
+
         public static final TalonFXConfiguration drive_config(InvertedValue inverted) {
             return new TalonFXConfiguration()
                 .withSlot0(
                     new Slot0Configs()
-                    .withKP(0)
-                    .withKI(0)
-                    .withKD(0)
-                    .withKV(0)
-                    .withKS(0)
-                    .withKG(0)
-                    .withKA(0)
+                    .withKP(0.2)
+                    .withKV(0.2)
                 )
                 .withMotorOutput(
                     new MotorOutputConfigs()
@@ -110,18 +112,61 @@ public class configs {
             return new TalonFXConfiguration()
                 .withSlot0(
                     new Slot0Configs()
-                    .withKP(0)
-                    .withKI(0)
-                    .withKD(0)
-                    .withKV(0)
-                    .withKS(0)
-                    .withKG(0)
-                    .withKA(0)
+                    .withKP(50)
+                    .withKI(1.5)
+                    .withKV(0.15)
                 )
                 .withMotorOutput(
                     new MotorOutputConfigs()
                     .withInverted(inverted)
+                )
+                .withFeedback(new FeedbackConfigs()
+                    .withSensorToMechanismRatio(150.0/7.0)
+                )
+                .withClosedLoopGeneral(new ClosedLoopGeneralConfigs()
+                    .withContinuousWrap(true)
                 );
         } 
     }  
+
+    public final class elevtor {
+        public static final TalonFXConfiguration elevator_left_config() {
+            return new TalonFXConfiguration()
+                .withSlot0(new Slot0Configs()
+                    .withKP(50)
+                    .withKV(1.5)
+                )
+                .withMotionMagic(new MotionMagicConfigs()
+                    .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(4))
+                    .withMotionMagicCruiseVelocity(RotationsPerSecond.of(4))
+                )
+                .withFeedback(new FeedbackConfigs()
+                    .withSensorToMechanismRatio(17.6)
+                )
+                .withMotorOutput(
+                    new MotorOutputConfigs()
+                    .withInverted(InvertedValue.Clockwise_Positive)       
+                );
+        }
+
+        public static final TalonFXConfiguration elevator_right_config() {
+            return new TalonFXConfiguration()
+                .withSlot0(new Slot0Configs()
+                    .withKP(50)
+                    .withKV(1.5)
+                )
+                .withMotionMagic(new MotionMagicConfigs()
+                    .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(4))
+                    .withMotionMagicCruiseVelocity(RotationsPerSecond.of(4))
+                )
+                .withFeedback(new FeedbackConfigs()
+                    .withSensorToMechanismRatio(17.6)
+                )
+                .withMotorOutput(
+                    new MotorOutputConfigs()
+                    .withInverted(InvertedValue.CounterClockwise_Positive)       
+                );
+        }
+    }
+
 }

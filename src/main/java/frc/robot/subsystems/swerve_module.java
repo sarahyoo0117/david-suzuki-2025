@@ -32,13 +32,13 @@ public class swerve_module {
         abs = new DutyCycleEncoder(config.abs_channel);
         abs.setDutyCycleRange(1 / 4096, 4096 / 4096);
         abs.setInverted(config.abs_inverted);
-        reset_turn();
+        zero();
     }
 
     public void apply_state(SwerveModuleState state) {
         state.optimize(get_turn_position());
         //TODO: drive and turn voltage
-        drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius * 2 * Math.PI)));
+        drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
         turn.setControl(new PositionVoltage(state.angle.getRotations()));
     } 
 
@@ -47,7 +47,7 @@ public class swerve_module {
         turn.stopMotor();
     }
 
-    public void reset_turn() {
+    public void zero() {
         turn.setPosition(abs.get() - config.abs_offset);
     }
 

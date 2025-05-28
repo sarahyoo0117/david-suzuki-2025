@@ -6,13 +6,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.elevator.elevator_state;
+import frc.robot.subsystems.elevator;
+import frc.robot.subsystems.end_effector;
 import frc.robot.commands.commands;
 
 public final class bindings {
   //stragety: score coral -> get algae from reef -> score to net / processor
-  public static elevator_state height_for_coral = elevator_state.L4;
-  public static elevator_state height_for_algae_intake = elevator_state.ALGAE_REEF2;
-  public static elevator_state height_for_algae_score = elevator_state.ALGAE_NET;
+  public static elevator_state elevator_height_for_coral = elevator_state.L4;
+  public static elevator_state elevator_height_to_intake_algae = elevator_state.ALGAE_REEF2;
+  public static elevator_state elevator_height_to_score_algae = elevator_state.ALGAE_NET;
 
   private final robot robot;
 
@@ -26,10 +28,16 @@ public final class bindings {
     Supplier<Double> turn_func = () -> -oi.xbox.getRightX();
     robot.swerve.setDefaultCommand(commands.teleop_drive(robot.swerve, drive_func, turn_func));
     
+    var ctrl_swerve_zero = oi.cmd_xbox.leftBumper();
+    var ctrl_intake_algae = oi.cmd_xbox.rightTrigger();
     var ctrl_elevator_to_b = oi.cmd_xbox.b(); //L1
     var ctrl_elevator_to_a = oi.cmd_xbox.a(); //L2
     var ctrl_elevator_to_x = oi.cmd_xbox.x(); //L3
     var ctrl_elevator_to_y = oi.cmd_xbox.y(); //L4
+
+    ctrl_swerve_zero.onTrue(robot.swerve.zero());
+
+    ctrl_intake_algae.whileTrue(commands.intake_algae(robot.end_effector, robot.elevator));
 
     ctrl_elevator_to_b.onTrue(change_state(elevator_state.L1, elevator_state.ALGAE_REEF1, elevator_state.ALGAE_PROCESSOR));
     ctrl_elevator_to_a.onTrue(change_state(elevator_state.L2, elevator_state.ALGAE_REEF1, elevator_state.ALGAE_PROCESSOR));
@@ -40,9 +48,9 @@ public final class bindings {
   //TODO: LEDs
   public final Command change_state(elevator_state coral, elevator_state algae_intake, elevator_state algae_score) {
       return Commands.runOnce(() -> {
-          height_for_coral = coral;
-          height_for_algae_score = algae_intake;
-          height_for_algae_score = algae_score;
+          elevator_height_for_coral = coral;
+          elevator_height_to_intake_algae = algae_intake;
+          elevator_height_to_score_algae = algae_score;
       }, robot.elevator);
   }
 }

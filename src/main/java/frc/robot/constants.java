@@ -1,12 +1,15 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.FeetPerSecond;
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 
 public class constants {
@@ -33,18 +36,25 @@ public class constants {
         );
     }
 
+    public final class end_effector {
+        public static final AngularVelocity intake_manual = RotationsPerSecond.of(8); 
+        public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
+        public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
+        public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
+    }
+
     public final class elevator {
         //TODO: set heights for elevator states 
         public static enum elevator_state {
             HOME(Meters.of(0.0)),
-            L1(Meters.of(1.0)),
-            L2(Meters.of(2.0)),
-            L3(Meters.of(3.0)),
-            L4(Meters.of(4.0)),
-            ALGAE_REEF1(Meters.of(2.0)),
-            ALGAE_REEF2(Meters.of(3.0)),
-            ALGAE_NET(Meters.of(4.0)),
-            ALGAE_PROCESSOR(Meters.of(1.0));
+            L1(Meters.of(0.25)),
+            L2(Inches.of(0.5)),
+            L3(Meters.of(1.0)),
+            L4(Meters.of(1.5)),
+            ALGAE_REEF1(Meters.of(0.37)),
+            ALGAE_REEF2(Meters.of(0.85)),
+            ALGAE_NET(Meters.of(1.6)),
+            ALGAE_PROCESSOR(Meters.of(0.0));
             public final Distance height;
             private elevator_state(Distance height) {
                 this.height = height;

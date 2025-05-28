@@ -1,7 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.elevator;
+import frc.robot.subsystems.end_effector;
+import frc.robot.subsystems.ramp;
 import frc.robot.subsystems.swerve;
 
 public class robot extends TimedRobot {
@@ -9,15 +12,21 @@ public class robot extends TimedRobot {
   public final bindings bindings;
   public final swerve swerve;
   public final elevator elevator;
+  public final ramp ramp;
+  public final end_effector end_effector;
 
   public robot() {
     swerve = new swerve();
     elevator = new elevator();
+    ramp = new ramp();
+    end_effector = new end_effector();
     bindings = new bindings(this);
   }
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+  }
 
   @Override
   public void disabledInit() {}
