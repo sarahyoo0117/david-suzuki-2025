@@ -1,16 +1,19 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,14 +27,21 @@ public class end_effector extends SubsystemBase {
     private DigitalInput lidar = new DigitalInput(configs.end_effector_lidar);
     private boolean lidar_sees_coral = false; //TODO: unjam coral?
     private VelocityVoltage roller_output_req = new VelocityVoltage(0);
-    private PositionVoltage pivot_output_req = new PositionVoltage(0); 
+    private MotionMagicVoltage pivot_output_req = new MotionMagicVoltage(0); 
     private StatusSignal<Angle> pivot_position_signal = pivot.getPosition();
 
     public gamepiece last_gamepiece; 
 
+    public end_effector() {
+        pivot.setPosition(Degrees.of(100));
+        roller.getConfigurator().apply(configs.end_effector.roller_config());
+        setDefaultCommand(zero()); //zero
+    }
+
     @Override
     public void periodic() {
         BaseStatusSignal.refreshAll(pivot_position_signal);
+        SmartDashboard.putNumber("end_effector_pivot", pivot.getPosition().getValue().in(Degrees));
         lidar_sees_coral = lidar.get();
     }
     
@@ -65,6 +75,13 @@ public class end_effector extends SubsystemBase {
     public Command cmd_set_pivot(Angle angle) {
         return Commands.runOnce(() -> {
             set_pivot_pos(angle);
+        }, this);
+    }
+
+    public Command zero() {
+        return Commands.runOnce(() -> {
+            set_roller_speed(RotationsPerSecond.of(0));
+            set_pivot_pos(Degrees.of(100));
         }, this);
     }
 

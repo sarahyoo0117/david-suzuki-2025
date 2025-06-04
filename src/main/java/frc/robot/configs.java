@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Translation2d;
 
@@ -79,28 +80,30 @@ public class configs {
                 this.abs_inverted = abs_inverted;
             }
         }
-        //TODO: find encoder offsets
+        //abs in rotations or radians?!
         public static final module_config[] module_configs = {
             new module_config(can_swerve_fr_drive, can_swerve_fr_turn, constants.swerve.module_offsets[0], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fr_abs, true, 0.726),
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fr_abs, false, 0.275),
             new module_config(can_swerve_fl_drive, can_swerve_fl_turn, constants.swerve.module_offsets[1], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fl_abs, true, 0.086),
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_fl_abs, false, 0.432),
             new module_config(can_swerve_br_drive, can_swerve_br_turn, constants.swerve.module_offsets[2], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_br_abs, true, 0.947),
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_br_abs, false, 0.063),
             new module_config(can_swerve_bl_drive, can_swerve_bl_turn, constants.swerve.module_offsets[3], 
-                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_bl_abs, true, 0.575)
+                InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive, dio_swerve_bl_abs, false, 0.922)
         };
 
         public static final TalonFXConfiguration drive_config(InvertedValue inverted) {
             return new TalonFXConfiguration()
                 .withSlot0(
                     new Slot0Configs()
-                    .withKP(0.2)
-                    .withKV(0.2)
+                    .withKP(0.0)
+                    .withKV(0.4)
                 )
                 .withMotorOutput(
                     new MotorOutputConfigs()
                     .withInverted(inverted)
+                    .withDutyCycleNeutralDeadband(0.05)
+                    .withNeutralMode(NeutralModeValue.Brake)
                 )
                 .withCurrentLimits(
                     new CurrentLimitsConfigs()
@@ -169,4 +172,13 @@ public class configs {
         }
     }
 
+    public final class end_effector {
+        public static final TalonFXConfiguration roller_config() {
+            return new TalonFXConfiguration()
+            .withSlot0(new Slot0Configs()
+                .withKP(0.06)
+                .withKV(0.09)
+            );
+        }
+    }
 }

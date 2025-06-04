@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.bindings;
 import frc.robot.configs;
 import frc.robot.constants.elevator.elevator_state;
 import frc.robot.sim.elevator_mech2d;
@@ -34,6 +35,7 @@ public class elevator extends SubsystemBase {
     public elevator() {
         motor_left.getConfigurator().apply(configs.elevtor.elevator_left_config());
         motor_right.getConfigurator().apply(configs.elevtor.elevator_right_config());
+        setDefaultCommand(cmd_set_state(elevator_state.HOME));
     }
 
     @Override

@@ -21,10 +21,11 @@ public class constants {
         //L3 swerve
         public static final double max_module_speed_mps = FeetPerSecond.of(16.5).in(MetersPerSecond);
 
-        public static final Translation2d offset_fr = new Translation2d(half_wheelbase_meters, half_wheelbase_meters);
-        public static final Translation2d offset_fl = new Translation2d(half_wheelbase_meters, -half_wheelbase_meters);
-        public static final Translation2d offset_br = new Translation2d(-half_wheelbase_meters, half_wheelbase_meters);
-        public static final Translation2d offset_bl = new Translation2d(-half_wheelbase_meters, -half_wheelbase_meters);
+        //y-axis is horizontal, x-axis is vertical
+        public static final Translation2d offset_fr = new Translation2d(half_wheelbase_meters, -half_wheelbase_meters);
+        public static final Translation2d offset_fl = new Translation2d(half_wheelbase_meters, half_wheelbase_meters);
+        public static final Translation2d offset_br = new Translation2d(-half_wheelbase_meters, -half_wheelbase_meters);
+        public static final Translation2d offset_bl = new Translation2d(-half_wheelbase_meters, half_wheelbase_meters);
         
         public static final Translation2d[] module_offsets = { offset_fr, offset_fl, offset_br, offset_bl };
     
@@ -44,12 +45,12 @@ public class constants {
     }
 
     public final class elevator {
-        //TODO: set heights for elevator states 
         public static enum elevator_state {
             HOME(Meters.of(0.0)),
-            L1(Meters.of(0.25)),
-            L2(Inches.of(0.5)),
-            L3(Meters.of(1.0)),
+            L1(Meters.of(0.48)),
+            L2(Inches.of(0.8)),
+            L3(Meters.of(1.2)),
+            //TODO: set heights for elevator states 
             L4(Meters.of(1.5)),
             ALGAE_REEF1(Meters.of(0.37)),
             ALGAE_REEF2(Meters.of(0.85)),

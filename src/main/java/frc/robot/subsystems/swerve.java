@@ -38,6 +38,14 @@ public class swerve extends SubsystemBase{
         pose_estimator = new SwerveDrivePoseEstimator(constants.swerve.drive_kinematics, get_heading(), get_module_positions(), new Pose2d());
         mech.init();
         SmartDashboard.putData("field2d", field);
+        new Thread(() -> {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            zero();
+        }).start();
     } 
     
     @Override

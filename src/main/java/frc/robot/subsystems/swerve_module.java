@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
+import java.util.concurrent.TimeoutException;
+
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -30,14 +32,12 @@ public class swerve_module {
         drive.getConfigurator().apply(configs.swerve.drive_config(config.drive_inverted));
         turn.getConfigurator().apply(configs.swerve.turn_config(config.turn_inverted));
         abs = new DutyCycleEncoder(config.abs_channel);
-        abs.setDutyCycleRange(1 / 4096, 4096 / 4096);
+        abs.setDutyCycleRange(1.0 / 4096.0, 4095.0 / 4096.0); //use doubles to prevent integer rounding
         abs.setInverted(config.abs_inverted);
-        zero();
     }
 
     public void apply_state(SwerveModuleState state) {
         state.optimize(get_turn_position());
-        //TODO: drive and turn voltage
         drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
         turn.setControl(new PositionVoltage(state.angle.getRotations()));
     } 
