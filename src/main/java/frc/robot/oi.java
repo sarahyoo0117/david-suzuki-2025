@@ -18,6 +18,7 @@ public final class oi {
     public static final CommandGenericHID cmd_xkeys = new CommandGenericHID(1);
     public static final GenericHID xkeys = cmd_xkeys.getHID();
 
+    //up-left is positive
     public static Translation2d get_left_stick() {
         return new Translation2d(-driver.getLeftY(), -driver.getLeftX());
     }

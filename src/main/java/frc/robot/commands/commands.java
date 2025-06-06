@@ -13,12 +13,12 @@ import frc.robot.constants;
 import frc.robot.constants.elevator.elevator_state;
 import frc.robot.subsystems.elevator;
 import frc.robot.subsystems.end_effector;
-import frc.robot.subsystems.swerve;
+import frc.robot.subsystems.swerve_lowlevel;
 import frc.robot.subsystems.end_effector.gamepiece;
 
 public class commands {
     //TODO: add slew rate limiter if needed
-    public static final Command teleop_drive(swerve swerve, Supplier<Translation2d> drive_func, Supplier<Translation2d> turn_func) {
+    public static final Command teleop_drive(swerve_lowlevel swerve, Supplier<Translation2d> drive_func, Supplier<Translation2d> turn_func) {
         final double drive_factor = 3;
         final double steer_factor = 6;
         return swerve.set_speeds(() -> {
