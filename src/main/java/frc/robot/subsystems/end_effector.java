@@ -35,7 +35,6 @@ public class end_effector extends SubsystemBase {
     public end_effector() {
         pivot.setPosition(Degrees.of(100));
         roller.getConfigurator().apply(configs.end_effector.roller_config());
-        setDefaultCommand(zero()); //zero
     }
 
     @Override

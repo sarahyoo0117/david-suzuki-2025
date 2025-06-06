@@ -1,5 +1,6 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.FeetPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
@@ -9,6 +10,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 
@@ -42,6 +44,7 @@ public class constants {
         public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
         public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
         public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
+        public static final Angle score_coral_L1_pivot = Degrees.of(-28); 
     }
 
     public final class elevator {
