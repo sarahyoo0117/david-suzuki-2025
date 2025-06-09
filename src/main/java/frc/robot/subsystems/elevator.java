@@ -70,7 +70,14 @@ public class elevator extends SubsystemBase {
         motor_right.setPosition(0);
     }
 
-    public Command home() {
+    //TODO: zero elevator
+    public Command cmd_zero() {
+        return Commands.runOnce(() -> {
+            zero();
+        }, this);
+    }
+    
+    public Command cmd_home() {
         return cmd_set_state(elevator_state.HOME).andThen(Commands.idle(this));
     }
 
@@ -80,7 +87,7 @@ public class elevator extends SubsystemBase {
         }, this);
     }
 
-    public Command hold_target_state(elevator_state state) {
+    public Command cmd_hold_target_state(elevator_state state) {
         return cmd_set_state(state).andThen(Commands.idle(this));
     }
 }

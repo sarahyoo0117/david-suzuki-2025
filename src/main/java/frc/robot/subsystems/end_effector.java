@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.configs;
+import frc.robot.constants;
 
 import static frc.robot.constants.end_effector.*;
 
@@ -25,7 +26,6 @@ public class end_effector extends SubsystemBase {
     private final TalonFX roller = new TalonFX(configs.can_end_effector_roller.id, configs.can_end_effector_roller.canbus); 
     private final TalonFX pivot = new TalonFX(configs.can_end_effector_pivot.id, configs.can_end_effector_pivot.canbus);
     private DigitalInput lidar = new DigitalInput(configs.end_effector_lidar);
-    private boolean lidar_sees_coral = false; //TODO: unjam coral?
     private VelocityVoltage roller_output_req = new VelocityVoltage(0);
     private MotionMagicVoltage pivot_output_req = new MotionMagicVoltage(0); 
     private StatusSignal<Angle> pivot_position_signal = pivot.getPosition();
@@ -41,7 +41,6 @@ public class end_effector extends SubsystemBase {
     public void periodic() {
         BaseStatusSignal.refreshAll(pivot_position_signal);
         SmartDashboard.putNumber("end_effector_pivot", pivot.getPosition().getValue().in(Degrees));
-        lidar_sees_coral = lidar.get();
     }
     
     @Override
@@ -50,7 +49,7 @@ public class end_effector extends SubsystemBase {
     }
 
     public boolean lidar_sees_coral() {
-        return lidar_sees_coral;
+        return lidar.get();
     }
 
     public void set_roller_speed(AngularVelocity speed) {
@@ -61,26 +60,26 @@ public class end_effector extends SubsystemBase {
         }
     }
 
-    public void set_pivot_pos(Angle angle) {
+    public void set_pivot_angle(Angle angle) {
        pivot.setControl(pivot_output_req.withPosition(angle));
     }
 
-    public Command cmd_set_roller(AngularVelocity roller_speed) {
+    public Command cmd_set_roller_speed(AngularVelocity roller_speed) {
         return Commands.runOnce(() -> {
             set_roller_speed(roller_speed);
         }, this);
     }
 
-    public Command cmd_set_pivot(Angle angle) {
+    public Command cmd_set_pivot_angle(Angle angle) {
         return Commands.runOnce(() -> {
-            set_pivot_pos(angle);
+            set_pivot_angle(angle);
         }, this);
     }
 
     public Command zero() {
         return Commands.runOnce(() -> {
             set_roller_speed(RotationsPerSecond.of(0));
-            set_pivot_pos(Degrees.of(100));
+            set_pivot_angle(constants.end_effector.pivot_fully_up);
         }, this);
     }
 

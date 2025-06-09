@@ -9,6 +9,7 @@ import frc.robot.constants.elevator.elevator_state;
 import frc.robot.commands.commands;
 
 import frc.robot.oi.shaping_chooser;
+import frc.robot.subsystems.end_effector.gamepiece;
 
 public final class bindings {
   //stragety: score coral -> get algae from reef -> score to net / processor
@@ -36,18 +37,18 @@ public final class bindings {
     robot.end_effector.setDefaultCommand(robot.end_effector.zero());
 
     //driver xbos controller buttons
-    var ctrl_swerve_zero_abs = oi.cmd_driver.povUp().or(oi.cmd_xkeys.button(11));
-    var ctrl_swerve_zero_heading = oi.cmd_driver.povDown();
-    var ctrl_auto_align_left = oi.cmd_driver.back();
-    var ctrl_auto_align_right = oi.cmd_driver.start();
-    var ctrl_intake_coral = oi.cmd_driver.rightTrigger();
-    var ctrl_prescore = oi.cmd_driver.leftBumper();
-    var ctrl_spit = oi.cmd_driver.rightBumper();
-    var ctrl_intake_algae = oi.cmd_driver.leftTrigger();
     var ctrl_elevator_to_b = oi.cmd_driver.b(); //L1
     var ctrl_elevator_to_a = oi.cmd_driver.a(); //L2
     var ctrl_elevator_to_x = oi.cmd_driver.x(); //L3
     var ctrl_elevator_to_y = oi.cmd_driver.y(); //L4
+    var ctrl_swerve_zero_abs = oi.cmd_driver.povUp().or(oi.cmd_xkeys.button(11));
+    var ctrl_swerve_zero_heading = oi.cmd_driver.povDown();
+    var ctrl_auto_align_left = oi.cmd_driver.back();
+    var ctrl_auto_align_right = oi.cmd_driver.start();
+    var ctrl_intake_algae = oi.cmd_driver.leftTrigger();
+    var ctrl_intake_coral = oi.cmd_driver.rightTrigger();
+    var ctrl_spit = oi.cmd_driver.rightBumper();
+    var ctrl_prescore = oi.cmd_driver.leftBumper();
     //can climb only all elevator buttons are pressed lol
     var ctrl_climb_prep = ctrl_elevator_to_b.and(ctrl_elevator_to_a).and(ctrl_elevator_to_x).and(ctrl_elevator_to_y);
     //TODO: add ctrl_uppies and ctrl_tap when climb is prepped
@@ -63,18 +64,23 @@ public final class bindings {
     var ctrl_zero_end_effector_pivot = oi.cmd_xkeys.button(18);    
     var ctrl_trap = oi.cmd_xkeys.button(19);    
   
-    ctrl_swerve_zero_abs.onTrue(robot.swerve.cmd_zero_abs());
-    ctrl_swerve_zero_heading.onTrue(robot.swerve.cmd_zero_heading());
-
+    //binds commands to driver controller
     ctrl_elevator_to_b.onTrue(change_state(elevator_state.L1, elevator_state.ALGAE_REEF1, elevator_state.ALGAE_PROCESSOR));
     ctrl_elevator_to_a.onTrue(change_state(elevator_state.L2, elevator_state.ALGAE_REEF1, elevator_state.ALGAE_PROCESSOR));
     ctrl_elevator_to_x.onTrue(change_state(elevator_state.L3, elevator_state.ALGAE_REEF2, elevator_state.ALGAE_NET));
     ctrl_elevator_to_y.onTrue(change_state(elevator_state.L4, elevator_state.ALGAE_REEF2, elevator_state.ALGAE_NET));
-    /*
-    ctrl_elevator_move.whileTrue(
-      Commands.deferredProxy(() -> robot.elevator.hold_target_state(elevator_height_to_score_coral))
-    );
-     */
+    ctrl_swerve_zero_abs.onTrue(robot.swerve.cmd_zero_abs());
+    ctrl_swerve_zero_heading.onTrue(robot.swerve.cmd_zero_heading());
+    ctrl_intake_algae.onTrue(commands.intake_algae(robot.end_effector, robot.elevator));
+    ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector));
+    ctrl_spit.onTrue(commands.spit(robot.end_effector, robot.elevator));
+    ctrl_prescore.and(() -> robot.end_effector.last_gamepiece == gamepiece.CORAL)
+      .onTrue(robot.elevator.cmd_set_state(elevator_height_to_score_coral));
+
+    //binds commands to xkeys
+    ctrl_manual_end_effector_pivot_up.onTrue(robot.end_effector.cmd_set_pivot_angle(constants.end_effector.pivot_fully_up));
+    ctrl_manual_end_effector_pivot_down.onTrue(robot.end_effector.cmd_set_pivot_angle(constants.end_effector.pivot_fully_down));
+    ctrl_zero_end_effector_pivot.onTrue(robot.end_effector.zero());
   }
 
   //TODO: LEDs

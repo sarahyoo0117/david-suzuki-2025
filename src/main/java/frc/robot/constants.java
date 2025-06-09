@@ -38,12 +38,19 @@ public class constants {
         );
     }
 
+    public final class ramp {
+        public static final AngularVelocity intake_coral = RotationsPerSecond.of(8); 
+        public static final AngularVelocity unjam_coral = RotationsPerSecond.of(-1); 
+    }
+
     public final class end_effector {
         public static final AngularVelocity intake_manual = RotationsPerSecond.of(8); 
         public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
         public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
         public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
         public static final Angle score_coral_L1_pivot = Degrees.of(-28); 
+        public static final Angle pivot_fully_up = Degrees.of(100); 
+        public static final Angle pivot_fully_down = Degrees.of(0); 
     }
 
     public final class elevator {

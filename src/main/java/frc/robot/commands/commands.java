@@ -1,17 +1,17 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.bindings;
+import frc.robot.constants.elevator.elevator_state;
 import frc.robot.subsystems.elevator;
 import frc.robot.subsystems.end_effector;
 import frc.robot.subsystems.swerve;
 import frc.robot.subsystems.end_effector.gamepiece;
+import frc.robot.subsystems.ramp;
 
 public class commands {
     //TODO: add slew rate limiter if needed
@@ -33,6 +33,17 @@ public class commands {
         return end_effector.intake(gamepiece.ALGAE)
             .alongWith(elevator.cmd_set_state(bindings.elevator_height_to_intake_algae));
     }
+
+    public static Command spit(end_effector end_effector, elevator elevator) {
+        return elevator.cmd_set_state(elevator_state.HOME)
+            .andThen(end_effector.spit(end_effector.last_gamepiece));
+    }
+
+    public static Command intake_coral(ramp ramp, end_effector end_effector) {
+        return ramp.intake()
+            .until(() -> end_effector.lidar_sees_coral());
+    }
+
 
     /*
     public static final Command intake_algae_ground(end_effector end_effector) {
