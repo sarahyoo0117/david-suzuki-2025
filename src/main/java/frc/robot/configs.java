@@ -13,11 +13,22 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 
 public class configs {
-    public static final String canbus = "canivore";        
-    public static final String canbus_rio = "rio";
+    public static final class LL {
+        public final String name;
+        public final Translation3d mounted_offset;
+        public final Rotation2d mounted_angle;
+        public LL(String name, Rotation2d mounted_angle, Translation3d mounted_offset) {
+            this.name = name;
+            this.mounted_angle = mounted_angle;
+            this.mounted_offset = mounted_offset;
+        }
+    }
 
     public static final class can {
         public String canbus;    
@@ -27,6 +38,16 @@ public class configs {
             this.canbus = canbus;
         } 
     }
+
+    public static final double pole_spacing_m = Units.inchesToMeters(13);
+    public static final double ll_up_m = Units.inchesToMeters(6.75);
+    public static final double ll_forward_m = Units.inchesToMeters(10);
+    public static final Rotation2d ll_mounted_angle = Rotation2d.fromDegrees(31);
+    public static final LL ll_left = new LL("limelight-left", ll_mounted_angle, new Translation3d(ll_forward_m, pole_spacing_m/2.0, ll_up_m));
+    public static final LL ll_right = new LL("limelight-right", ll_mounted_angle, new Translation3d(ll_forward_m, -pole_spacing_m/2.0, ll_up_m));
+
+    public static final String canbus = "canivore";        
+    public static final String canbus_rio = "rio";
 
     public static final can can_swerve_fr_drive = new can(8, canbus); 
     public static final can can_swerve_fr_turn = new can(9, canbus); 

@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.configs.LL;
 import frc.robot.utils.LimelightHelpers;
 
 public class swerve extends swerve_lowlevel {
@@ -18,15 +19,15 @@ public class swerve extends swerve_lowlevel {
     SimpleMotorFeedforward y_ff = new SimpleMotorFeedforward(0, 0);
     SimpleMotorFeedforward turn_ff = new SimpleMotorFeedforward(0, 0);
 
-    public Command strafe_to_tag(String ll_name, double max_speed, double tolerance) {
+    //TODO: max speed, tolerance
+    public Command strafe_to_tag(LL ll, double max_speed, double tolerance) {
         //every angles is in degrees
-        double mounted_angle = 20;
         return set_speeds(() -> {
-            if (LimelightHelpers.getTV(ll_name)) {
-                Pose3d pose = LimelightHelpers.getTargetPose3d_RobotSpace(ll_name);
+            if (LimelightHelpers.getTV(ll.name)) {
+                Pose3d pose = LimelightHelpers.getTargetPose3d_RobotSpace(ll.name);
                 double norm = pose.getTranslation().getNorm();
-                double ty =  LimelightHelpers.getTY(ll_name) + mounted_angle;
-                double tx = LimelightHelpers.getTX(ll_name);
+                double ty =  LimelightHelpers.getTY(ll.name) + ll.mounted_angle.getDegrees();
+                double tx = LimelightHelpers.getTX(ll.name);
                 //x axis is vertical, y axis is horizontal
                 double x_dist = Math.cos(ty) * norm;
                 double y_dist = Math.tan(tx) * x_dist;
