@@ -15,7 +15,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 
 public class constants {
-    
     public final class swerve {
         public static final double wheel_diameter = Units.inchesToMeters(3.75);
         public static final double wheel_radius = wheel_diameter / 2;

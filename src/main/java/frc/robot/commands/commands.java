@@ -7,10 +7,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.bindings;
-import frc.robot.constants;
-import frc.robot.constants.elevator.elevator_state;
 import frc.robot.subsystems.elevator;
 import frc.robot.subsystems.end_effector;
 import frc.robot.subsystems.swerve;
@@ -32,6 +29,12 @@ public class commands {
         }); 
     }
 
+    public static Command intake_algae(end_effector end_effector, elevator elevator) {
+        return end_effector.intake(gamepiece.ALGAE)
+            .alongWith(elevator.cmd_set_state(bindings.elevator_height_to_intake_algae));
+    }
+
+    /*
     public static final Command intake_algae_ground(end_effector end_effector) {
         return Commands.runOnce(() -> {
             end_effector.set_pivot_pos(Degrees.of(0));
@@ -51,4 +54,5 @@ public class commands {
             end_effector.cmd_set_roller(constants.end_effector.intake_manual)
         );
     }
+    */
 }

@@ -44,7 +44,7 @@ public class swerve_lowlevel extends SubsystemBase{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            zero();
+            zero_abs();
         }).start();
     } 
     
@@ -76,13 +76,23 @@ public class swerve_lowlevel extends SubsystemBase{
         }, this);
     }
 
-    public Command zero() {
+    public Command cmd_zero_abs() {
         return Commands.runOnce(() -> {
-            modules[0].zero();
-            modules[1].zero();
-            modules[2].zero();
-            modules[3].zero();
+            zero_abs();
         }, this);
+    }
+
+    public Command cmd_zero_heading() {
+        return Commands.runOnce(() -> {
+            zero_heading();
+        }, this);
+    }
+
+    public void zero_abs() {
+        modules[0].zero_abs();
+        modules[1].zero_abs();
+        modules[2].zero_abs();
+        modules[3].zero_abs();
     }
 
     public void zero_heading() {

@@ -19,6 +19,7 @@ public class swerve extends swerve_lowlevel {
     SimpleMotorFeedforward y_ff = new SimpleMotorFeedforward(0, 0);
     SimpleMotorFeedforward turn_ff = new SimpleMotorFeedforward(0, 0);
 
+    //TODO: line up to a tag closer to cam
     //TODO: max speed, tolerance
     public Command strafe_to_tag(LL ll, double max_speed, double tolerance) {
         //every angles is in degrees

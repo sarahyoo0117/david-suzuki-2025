@@ -45,7 +45,7 @@ public class swerve_module {
         turn.stopMotor();
     }
 
-    public void zero() {
+    public void zero_abs() {
         turn.setPosition(abs.get() - config.abs_offset);
     }
 
