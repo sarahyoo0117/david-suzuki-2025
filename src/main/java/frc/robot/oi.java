@@ -71,6 +71,7 @@ public final class oi {
                 case cubic:
                     return Math.pow(x, 3);
                 case custom:
+                    return custom(x);
                 case linear:
                     return x;
                 default:
