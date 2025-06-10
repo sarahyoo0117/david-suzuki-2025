@@ -9,7 +9,6 @@ import frc.robot.constants.elevator.elevator_state;
 import frc.robot.commands.commands;
 
 import frc.robot.oi.shaping_chooser;
-import frc.robot.subsystems.end_effector.gamepiece;
 
 public final class bindings {
   //stragety: score coral -> get algae from reef -> score to net / processor
@@ -72,7 +71,7 @@ public final class bindings {
     ctrl_swerve_zero_heading.onTrue(robot.swerve.cmd_zero_heading());
     ctrl_intake_algae.onTrue(commands.intake_algae(robot.end_effector, robot.elevator));
     ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector));
-    ctrl_spit.onTrue(commands.spit(robot.end_effector, robot.elevator));
+    ctrl_spit.onTrue(robot.end_effector.cmd_spit());
     ctrl_prescore.onTrue(commands.prescore(robot.end_effector, robot.elevator));
 
     //binds commands to xkeys

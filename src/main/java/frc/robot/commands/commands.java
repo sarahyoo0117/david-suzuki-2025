@@ -34,11 +34,6 @@ public class commands {
             .alongWith(elevator.cmd_set_state(bindings.elevator_height_to_intake_algae));
     }
 
-    public static Command spit(end_effector end_effector, elevator elevator) {
-        return elevator.cmd_set_state(elevator_state.HOME)
-            .andThen(end_effector.cmd_spit(end_effector.last_gamepiece));
-    }
-
     public static Command intake_coral(ramp ramp, end_effector end_effector) {
         return ramp.intake()
             .until(() -> end_effector.lidar_sees_coral());

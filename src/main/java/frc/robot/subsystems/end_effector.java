@@ -122,9 +122,9 @@ public class end_effector extends SubsystemBase {
         }, this);
     }
 
-    public Command cmd_spit(gamepiece gp) {
+    public Command cmd_spit() {
         return Commands.runOnce(() -> {
-            switch (gp) {
+            switch (last_gamepiece) {
                 case CORAL:
                     set_roller_speed(spit_coral);    
                     break;
