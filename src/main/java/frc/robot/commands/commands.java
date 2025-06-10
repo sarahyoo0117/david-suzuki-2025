@@ -30,13 +30,13 @@ public class commands {
     }
 
     public static Command intake_algae(end_effector end_effector, elevator elevator) {
-        return end_effector.intake(gamepiece.ALGAE)
+        return end_effector.cmd_intake(gamepiece.ALGAE)
             .alongWith(elevator.cmd_set_state(bindings.elevator_height_to_intake_algae));
     }
 
     public static Command spit(end_effector end_effector, elevator elevator) {
         return elevator.cmd_set_state(elevator_state.HOME)
-            .andThen(end_effector.spit(end_effector.last_gamepiece));
+            .andThen(end_effector.cmd_spit(end_effector.last_gamepiece));
     }
 
     public static Command intake_coral(ramp ramp, end_effector end_effector) {
@@ -44,26 +44,11 @@ public class commands {
             .until(() -> end_effector.lidar_sees_coral());
     }
 
-
-    /*
-    public static final Command intake_algae_ground(end_effector end_effector) {
-        return Commands.runOnce(() -> {
-            end_effector.set_pivot_pos(Degrees.of(0));
-            end_effector.set_roller_speed(constants.end_effector.intake_algae);
-        }, end_effector);
+    public static Command prescore(end_effector end_effector, elevator elevator) {
+        if (end_effector.last_gamepiece == gamepiece.CORAL) {
+            return elevator.cmd_set_state(bindings.elevator_height_to_score_coral);
+        } else {
+            return elevator.cmd_set_state(bindings.elevator_height_to_score_algae);
+        }
     }
-
-    public static final Command intake_algae_reef(end_effector end_effector, elevator elevator) {
-        return end_effector.intake(gamepiece.ALGAE)
-            .alongWith(elevator.hold_target_state(bindings.elevator_height_to_intake_algae));
-    }
-
-    public static final Command score_coral_L1(end_effector end_effector, elevator elevator) {
-        return Commands.sequence(
-            elevator.hold_target_state(elevator_state.L1),
-            end_effector.cmd_set_pivot(constants.end_effector.score_coral_L1_pivot),
-            end_effector.cmd_set_roller(constants.end_effector.intake_manual)
-        );
-    }
-    */
 }

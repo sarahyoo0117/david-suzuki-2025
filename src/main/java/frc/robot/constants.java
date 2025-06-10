@@ -49,12 +49,13 @@ public class constants {
         public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
         public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
         public static final Angle score_coral_L1_pivot = Degrees.of(-28); 
-        public static final Angle pivot_fully_up = Degrees.of(100); 
+        public static final Angle pivot_zero = Degrees.of(100); 
         public static final Angle pivot_fully_down = Degrees.of(0); 
     }
 
     public final class elevator {
         public static enum elevator_state {
+            MANUAL(Meters.of(0)),
             HOME(Meters.of(0.0)),
             L1(Meters.of(0.48)),
             L2(Inches.of(0.8)),

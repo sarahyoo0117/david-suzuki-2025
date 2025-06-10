@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -11,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.configs;
-import frc.robot.constants;
+
+import static frc.robot.constants.ramp.*;
 
 public class ramp extends SubsystemBase {
     private final TalonFX roller = new TalonFX(configs.can_ramp_roller.id, configs.can_ramp_roller.canbus); 
@@ -30,6 +29,14 @@ public class ramp extends SubsystemBase {
         }
     }
 
+    public boolean has_coral() {
+        return has_coral;
+    }
+
+    public boolean coral_homed() {
+        return coral_homed;
+    }
+
     public void set_roller_speed(AngularVelocity speed) {
         roller.setControl(velocity_output_req.withVelocity(speed));
     }
@@ -41,21 +48,13 @@ public class ramp extends SubsystemBase {
     }
 
     public Command intake() {
-        return cmd_set_roller(constants.ramp.intake_coral);
+        return cmd_set_roller(intake_coral);
     }
 
     //TODO: add unjam command
     public Command unjam() {
         has_coral = false;
         coral_homed = false;
-        return cmd_set_roller(constants.ramp.unjam_coral);
-    }
-
-    public boolean has_coral() {
-        return has_coral;
-    }
-
-    public boolean coral_homed() {
-        return coral_homed;
+        return cmd_set_roller(unjam_coral);
     }
 }

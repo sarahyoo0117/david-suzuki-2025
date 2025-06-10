@@ -34,7 +34,6 @@ public final class bindings {
     //subsystem default commands
     robot.swerve.setDefaultCommand(commands.teleop_drive(robot.swerve, drive_func, turn_func));
     robot.elevator.setDefaultCommand(robot.elevator.cmd_set_state(elevator_state.HOME));
-    robot.end_effector.setDefaultCommand(robot.end_effector.zero());
 
     //driver xbos controller buttons
     var ctrl_elevator_to_b = oi.cmd_driver.b(); //L1
@@ -55,10 +54,10 @@ public final class bindings {
     //var ctrl_elevator_move = oi.cmd_driver.rightBumper();
 
     //xkeys
-    var ctrl_manual_elevator_up = oi.cmd_xkeys.button(12);    
-    var ctrl_manual_elevator_down = oi.cmd_xkeys.button(13);    
-    var ctrl_manual_end_effector_pivot_up = oi.cmd_xkeys.button(14);    
-    var ctrl_manual_end_effector_pivot_down = oi.cmd_xkeys.button(15);    
+    var ctrl_manual_up = oi.cmd_xkeys.button(12);    
+    var ctrl_manual_down = oi.cmd_xkeys.button(13);    
+    var ctrl_manual_pivot_up = oi.cmd_xkeys.button(14);    
+    var ctrl_manual_pivot_down = oi.cmd_xkeys.button(15);    
     var ctrl_cease_manual = oi.cmd_xkeys.button(16);    
     var ctrl_zero_elevator = oi.cmd_xkeys.button(17);    
     var ctrl_zero_end_effector_pivot = oi.cmd_xkeys.button(18);    
@@ -74,13 +73,30 @@ public final class bindings {
     ctrl_intake_algae.onTrue(commands.intake_algae(robot.end_effector, robot.elevator));
     ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector));
     ctrl_spit.onTrue(commands.spit(robot.end_effector, robot.elevator));
-    ctrl_prescore.and(() -> robot.end_effector.last_gamepiece == gamepiece.CORAL)
-      .onTrue(robot.elevator.cmd_set_state(elevator_height_to_score_coral));
+    ctrl_prescore.onTrue(commands.prescore(robot.end_effector, robot.elevator));
 
     //binds commands to xkeys
-    ctrl_manual_end_effector_pivot_up.onTrue(robot.end_effector.cmd_set_pivot_angle(constants.end_effector.pivot_fully_up));
-    ctrl_manual_end_effector_pivot_down.onTrue(robot.end_effector.cmd_set_pivot_angle(constants.end_effector.pivot_fully_down));
-    ctrl_zero_end_effector_pivot.onTrue(robot.end_effector.zero());
+    /* TODO: try this without ctrl_cease_manual
+    var manual = ctrl_manual_up.or(ctrl_manual_down);
+    manual.onTrue(robot.elevator.cmd_manual(oi.manual_input(ctrl_manual_up, ctrl_manual_down)));
+     */
+    var elevator_manual = robot.elevator.cmd_manual(oi.manual_input(ctrl_manual_up, ctrl_manual_down));
+    ctrl_manual_up.or(ctrl_manual_down).onTrue(Commands.runOnce(() -> {
+      elevator_manual.schedule();
+    }, robot.elevator));
+
+    var end_effector_manual = robot.end_effector.cmd_manual(oi.manual_input(ctrl_manual_pivot_up, ctrl_manual_pivot_down));
+    ctrl_manual_pivot_up.or(ctrl_manual_pivot_down).onTrue(Commands.runOnce(() -> {
+      end_effector_manual.schedule();
+    }, robot.end_effector));
+
+    ctrl_cease_manual.onTrue(Commands.runOnce(() -> {
+      if (elevator_manual.isScheduled()) elevator_manual.cancel();
+      if (end_effector_manual.isScheduled()) end_effector_manual.cancel();
+    }));
+
+    ctrl_zero_elevator.onTrue(robot.elevator.cmd_zero());
+    ctrl_zero_end_effector_pivot.onTrue(robot.end_effector.cmd_zero());
   }
 
   //TODO: LEDs
