@@ -100,7 +100,7 @@ public class elevator extends SubsystemBase {
         }, this);
     }
 
-    public Command cmd_hold_target_state(elevator_state state) {
+    public Command cmd_hold_state(elevator_state state) {
         return cmd_set_state(state).andThen(Commands.idle(this));
     }
 }

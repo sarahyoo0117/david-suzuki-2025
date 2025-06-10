@@ -32,7 +32,6 @@ public final class bindings {
 
     //subsystem default commands
     robot.swerve.setDefaultCommand(commands.teleop_drive(robot.swerve, drive_func, turn_func));
-    robot.elevator.setDefaultCommand(robot.elevator.cmd_set_state(elevator_state.HOME));
 
     //driver xbos controller buttons
     var ctrl_elevator_to_b = oi.cmd_driver.b(); //L1

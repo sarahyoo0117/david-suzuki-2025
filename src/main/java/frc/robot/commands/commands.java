@@ -30,7 +30,7 @@ public class commands {
 
     public static Command intake_algae(end_effector end_effector, elevator elevator) {
         return end_effector.cmd_intake(gamepiece.ALGAE)
-            .alongWith(elevator.cmd_set_state(bindings.elevator_height_to_intake_algae));
+            .alongWith(elevator.cmd_hold_state(bindings.elevator_height_to_intake_algae));
     }
 
     public static Command intake_coral(ramp ramp, end_effector end_effector) {
@@ -40,9 +40,9 @@ public class commands {
 
     public static Command prescore(end_effector end_effector, elevator elevator) {
         if (end_effector.last_gamepiece == gamepiece.CORAL) {
-            return elevator.cmd_set_state(bindings.elevator_height_to_score_coral);
+            return elevator.cmd_hold_state(bindings.elevator_height_to_score_coral);
         } else {
-            return elevator.cmd_set_state(bindings.elevator_height_to_score_algae);
+            return elevator.cmd_hold_state(bindings.elevator_height_to_score_algae);
         }
     }
 }
