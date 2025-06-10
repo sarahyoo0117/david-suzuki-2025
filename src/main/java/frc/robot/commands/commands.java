@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.bindings;
+import frc.robot.constants.elevator.elevator_state;
 import frc.robot.subsystems.elevator;
 import frc.robot.subsystems.end_effector;
 import frc.robot.subsystems.swerve;
@@ -33,9 +34,9 @@ public class commands {
             .alongWith(elevator.cmd_hold_state(bindings.elevator_height_to_intake_algae));
     }
 
-    public static Command intake_coral(ramp ramp, end_effector end_effector) {
-        return ramp.cmd_intake()
-            .until(() -> end_effector.lidar_sees_coral());
+    public static Command intake_coral(ramp ramp, end_effector end_effector, elevator elevator) {
+        return elevator.cmd_set_state(elevator_state.HOME)
+            .andThen(ramp.cmd_intake()).until(() -> end_effector.lidar_sees_coral());
     }
 
     public static Command prescore(end_effector end_effector, elevator elevator) {

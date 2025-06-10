@@ -70,7 +70,7 @@ public final class bindings {
     ctrl_swerve_zero_heading.onTrue(robot.swerve.cmd_zero_heading());
     ctrl_auto_align_left.or(ctrl_auto_align_right).onTrue(robot.swerve.auto_align());
     ctrl_intake_algae.onTrue(commands.intake_algae(robot.end_effector, robot.elevator));
-    ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector));
+    ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector, robot.elevator));
     ctrl_spit.onTrue(robot.end_effector.cmd_spit());
     ctrl_prescore.onTrue(commands.prescore(robot.end_effector, robot.elevator));
 

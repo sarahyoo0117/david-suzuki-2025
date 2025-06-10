@@ -14,9 +14,10 @@ public class robot extends TimedRobot {
   public final elevator elevator;
   public final ramp ramp;
   public final end_effector end_effector;
+  public final boolean is_comp = false;
 
   public robot() {
-    swerve = new swerve();
+    swerve = new swerve(this);
     elevator = new elevator();
     ramp = new ramp();
     end_effector = new end_effector();

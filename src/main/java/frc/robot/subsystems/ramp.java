@@ -16,25 +16,14 @@ public class ramp extends SubsystemBase {
     private final TalonFX roller = new TalonFX(configs.can_ramp_roller.id, configs.can_ramp_roller.canbus); 
     private final DigitalInput lidar_edge = new DigitalInput(configs.ramp_lidar_edge);
     private final DigitalInput lidar_middle = new DigitalInput(configs.ramp_lidar_middle);
-    private boolean coral_homed = false, has_coral = false;
     private VelocityVoltage velocity_output_req = new VelocityVoltage(0);
 
-    @Override
-    public void periodic() {
-        if (lidar_edge.get() || lidar_middle.get()) {
-            has_coral = true;
-        }
-        if (lidar_edge.get() && lidar_middle.get()) {
-            coral_homed = true;
-        }
+    public boolean coral_seated() {
+        return lidar_edge.get() && lidar_middle.get(); 
     }
 
     public boolean has_coral() {
-        return has_coral;
-    }
-
-    public boolean coral_homed() {
-        return coral_homed;
+        return lidar_edge.get() || lidar_middle.get();
     }
 
     public void set_roller_speed(AngularVelocity speed) {
@@ -53,8 +42,6 @@ public class ramp extends SubsystemBase {
 
     //TODO: add unjam command
     public Command cmd_unjam() {
-        has_coral = false;
-        coral_homed = false;
         return cmd_set_roller_speed(unjam_coral);
     }
 }
