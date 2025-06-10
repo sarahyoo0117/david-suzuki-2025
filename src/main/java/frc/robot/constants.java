@@ -7,6 +7,8 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -15,6 +17,30 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 
 public class constants {
+    public static final AprilTagFieldLayout tags = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    public static final int[] red_reef_tag_ids = {10, 9, 8, 7, 6, 11}; //in clock-wise order from 10
+    public static final int[] blue_reef_tag_ids = {21, 20, 19, 18, 17, 22}; //in counter-clockwise order from 21
+
+    public final class elevator {
+        public static enum elevator_state {
+            MANUAL(Meters.of(0)),
+            HOME(Meters.of(0.0)),
+            L1(Meters.of(0.48)),
+            L2(Inches.of(0.8)),
+            L3(Meters.of(1.2)),
+            //TODO: set heights for elevator states 
+            L4(Meters.of(1.5)),
+            ALGAE_REEF1(Meters.of(0.37)),
+            ALGAE_REEF2(Meters.of(0.85)),
+            ALGAE_NET(Meters.of(1.2)),
+            ALGAE_PROCESSOR(Meters.of(0.0));
+            public final Distance height;
+            private elevator_state(Distance height) {
+                this.height = height;
+            }
+        }
+    }
+
     public final class swerve {
         public static final double wheel_diameter = Units.inchesToMeters(3.75);
         public static final double wheel_radius = wheel_diameter / 2;
@@ -51,25 +77,5 @@ public class constants {
         public static final Angle score_coral_L1_pivot = Degrees.of(-28); 
         public static final Angle pivot_zero = Degrees.of(100); 
         public static final Angle pivot_fully_down = Degrees.of(0); 
-    }
-
-    public final class elevator {
-        public static enum elevator_state {
-            MANUAL(Meters.of(0)),
-            HOME(Meters.of(0.0)),
-            L1(Meters.of(0.48)),
-            L2(Inches.of(0.8)),
-            L3(Meters.of(1.2)),
-            //TODO: set heights for elevator states 
-            L4(Meters.of(1.5)),
-            ALGAE_REEF1(Meters.of(0.37)),
-            ALGAE_REEF2(Meters.of(0.85)),
-            ALGAE_NET(Meters.of(1.6)),
-            ALGAE_PROCESSOR(Meters.of(0.0));
-            public final Distance height;
-            private elevator_state(Distance height) {
-                this.height = height;
-            }
-        }
     }
 }

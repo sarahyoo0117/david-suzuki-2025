@@ -68,6 +68,7 @@ public final class bindings {
     ctrl_elevator_to_y.onTrue(change_state(elevator_state.L4, elevator_state.ALGAE_REEF2, elevator_state.ALGAE_NET));
     ctrl_swerve_zero_abs.onTrue(robot.swerve.cmd_zero_abs());
     ctrl_swerve_zero_heading.onTrue(robot.swerve.cmd_zero_heading());
+    ctrl_auto_align_left.or(ctrl_auto_align_right).onTrue(robot.swerve.auto_align());
     ctrl_intake_algae.onTrue(commands.intake_algae(robot.end_effector, robot.elevator));
     ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector));
     ctrl_spit.onTrue(robot.end_effector.cmd_spit());

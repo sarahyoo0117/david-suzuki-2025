@@ -34,7 +34,7 @@ public class commands {
     }
 
     public static Command intake_coral(ramp ramp, end_effector end_effector) {
-        return ramp.intake()
+        return ramp.cmd_intake()
             .until(() -> end_effector.lidar_sees_coral());
     }
 

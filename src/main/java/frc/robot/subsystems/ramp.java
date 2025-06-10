@@ -41,20 +41,20 @@ public class ramp extends SubsystemBase {
         roller.setControl(velocity_output_req.withVelocity(speed));
     }
 
-    public Command cmd_set_roller(AngularVelocity speed) {
+    public Command cmd_set_roller_speed(AngularVelocity speed) {
         return Commands.runOnce(() -> {
             set_roller_speed(speed);
         }, this);
     }
 
-    public Command intake() {
-        return cmd_set_roller(intake_coral);
+    public Command cmd_intake() {
+        return cmd_set_roller_speed(intake_coral);
     }
 
     //TODO: add unjam command
-    public Command unjam() {
+    public Command cmd_unjam() {
         has_coral = false;
         coral_homed = false;
-        return cmd_set_roller(unjam_coral);
+        return cmd_set_roller_speed(unjam_coral);
     }
 }
