@@ -28,7 +28,6 @@ public class end_effector extends SubsystemBase {
     private DigitalInput lidar = new DigitalInput(configs.end_effector_lidar);
     private VelocityVoltage roller_velocity_request = new VelocityVoltage(0);
     private MotionMagicVoltage pivot_position_request = new MotionMagicVoltage(0); 
-    private Angle manual_pivot = Degrees.of(0);
 
     public gamepiece last_gamepiece; 
 
@@ -85,7 +84,7 @@ public class end_effector extends SubsystemBase {
     public Command cmd_manual(Supplier<Integer> pivot_speed) {
         return Commands.runOnce(() -> {
             int p = pivot_speed.get();
-            manual_pivot = get_pivot().plus(Degrees.of(p));
+            Angle manual_pivot = get_pivot().plus(Degrees.of(p));
             set_pivot(manual_pivot);
         }, this);
     }
