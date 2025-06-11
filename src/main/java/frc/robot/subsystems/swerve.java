@@ -38,6 +38,7 @@ public class swerve extends swerve_lowlevel {
 
     @Override
     public void periodic() {
+        super.periodic();
         //test_catch_reef_id();
     }
 

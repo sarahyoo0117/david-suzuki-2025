@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -15,7 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.bindings;
 import frc.robot.configs;
+import frc.robot.constants.elevator.elevator_state;
 
 import static frc.robot.constants.end_effector.*;
 
@@ -26,29 +29,34 @@ public class end_effector extends SubsystemBase {
     private final TalonFX roller = new TalonFX(configs.can_end_effector_roller.id, configs.can_end_effector_roller.canbus); 
     private final TalonFX pivot = new TalonFX(configs.can_end_effector_pivot.id, configs.can_end_effector_pivot.canbus);
     private DigitalInput lidar = new DigitalInput(configs.end_effector_lidar);
+
     private VelocityVoltage roller_velocity_request = new VelocityVoltage(0);
     private MotionMagicVoltage pivot_position_request = new MotionMagicVoltage(0); 
+    private TorqueCurrentFOC hold_algae_request = new TorqueCurrentFOC(hold_algae_current);
 
-    public gamepiece last_gamepiece; 
+    public gamepiece last_gamepiece = gamepiece.CORAL; 
 
     public end_effector() {
         pivot.setPosition(pivot_zero);
         roller.getConfigurator().apply(configs.end_effector.roller_config());
+        
         setDefaultCommand(Commands.run(() -> {
             switch (last_gamepiece) {
                 case CORAL:
-                    set_pivot(score_coral_L1_pivot);    
+                    set_pivot(pivot_zero);
+                    set_feed(RotationsPerSecond.of(0));
                     break;
                 case ALGAE:
-                    set_pivot(pivot_zero);
+                    roller.setControl(hold_algae_request); 
                     break;
-            }
+            } 
         }, this));
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("end_effector_pivot", pivot.getPosition().getValue().in(Degrees));
+        SmartDashboard.putBoolean("lidar-sees-coral", lidar_sees_coral());
     }
     
     @Override
@@ -57,14 +65,14 @@ public class end_effector extends SubsystemBase {
     }
 
     public boolean lidar_sees_coral() {
-        return lidar.get();
+        return !lidar.get(); 
     }
 
     public Angle get_pivot() {
         return pivot_position_request.getPositionMeasure();
     }
 
-    public void set_roller_speed(AngularVelocity speed) {
+    public void set_feed(AngularVelocity speed) {
         if (speed.abs(DegreesPerSecond) < 1) {
             roller.stopMotor();
         } else {
@@ -77,8 +85,8 @@ public class end_effector extends SubsystemBase {
     }
 
     public void zero() {
-        set_roller_speed(RotationsPerSecond.of(0));
-        set_pivot(pivot_zero);
+        roller.setControl(roller_velocity_request.withVelocity(0));
+        pivot.setControl(pivot_position_request.withPosition(pivot_zero));
     }
 
     public Command cmd_manual(Supplier<Integer> pivot_speed) {
@@ -89,9 +97,9 @@ public class end_effector extends SubsystemBase {
         }, this);
     }
 
-    public Command cmd_set_roller_speed(AngularVelocity roller_speed) {
+    public Command cmd_set_feed(AngularVelocity roller_speed) {
         return Commands.runOnce(() -> {
-            set_roller_speed(roller_speed);
+            set_feed(roller_speed);
         }, this);
     }
 
@@ -112,10 +120,11 @@ public class end_effector extends SubsystemBase {
             last_gamepiece = gp;
             switch (gp) {
                 case CORAL:
-                    set_roller_speed(intake_manual); 
+                    set_feed(intake_coral); 
                     break;
                 case ALGAE:
-                    set_roller_speed(intake_algae);
+                    set_pivot(pivot_intake_algae);
+                    set_feed(intake_algae);
                     break;
             }
         }, this);
@@ -125,13 +134,16 @@ public class end_effector extends SubsystemBase {
         return Commands.runOnce(() -> {
             switch (last_gamepiece) {
                 case CORAL:
-                    set_roller_speed(spit_coral);    
+                    if (bindings.elevator_height_to_score_coral == elevator_state.L1) {
+                        set_pivot(pivot_score_coral_L1);
+                    }
+                    set_feed(spit_coral);    
                     break;
                 case ALGAE:
-                    set_roller_speed(spit_algae); 
+                    set_feed(spit_algae); 
                     break;
             }
-        }).andThen(Commands.idle(this));
+        }, this);
     }
 
     public enum gamepiece {

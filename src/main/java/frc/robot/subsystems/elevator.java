@@ -25,7 +25,7 @@ public class elevator extends SubsystemBase {
     private final TalonFX motor_right = new TalonFX(configs.can_elevator_motor_right.id, configs.can_elevator_motor_right.canbus);
 
     private MotionMagicVoltage position_request = new MotionMagicVoltage(0);
-    private elevator_state target_state = elevator_state.HOME;
+    private elevator_state target_state;
     private Distance manual_height = Meters.of(0);
 
     public static final elevator_mech2d sim = new elevator_mech2d(3, 3); 
@@ -33,6 +33,7 @@ public class elevator extends SubsystemBase {
     public elevator() {
         motor_left.getConfigurator().apply(configs.elevtor.elevator_left_config());
         motor_right.getConfigurator().apply(configs.elevtor.elevator_right_config());
+        zero();
     }
 
     @Override
@@ -90,10 +91,6 @@ public class elevator extends SubsystemBase {
         }, this);
     }
     
-    public Command cmd_home() {
-        return cmd_set_state(elevator_state.HOME).andThen(Commands.idle(this));
-    }
-
     public Command cmd_set_state(elevator_state state) {
         return Commands.runOnce(() -> {
             set_target_state(state);
@@ -102,5 +99,9 @@ public class elevator extends SubsystemBase {
 
     public Command cmd_hold_state(elevator_state state) {
         return cmd_set_state(state).andThen(Commands.idle(this));
+    }
+
+    public Command cmd_deferred_proxy_hold_state(elevator_state state) {
+        return Commands.deferredProxy(() -> cmd_hold_state(state));
     }
 }

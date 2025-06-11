@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -22,11 +23,19 @@ public final class oi {
 
     //up-left is positive
     public static Translation2d get_left_stick() {
-        return new Translation2d(-driver.getLeftY(), -driver.getLeftX());
+        return new Translation2d(-driver.getLeftX(), -driver.getLeftY());
     }
 
     public static Translation2d get_right_stick() {
-        return new Translation2d(-driver.getRightY(), -driver.getRightX());
+        return new Translation2d(-driver.getRightX(), -driver.getRightY());
+    }
+
+    public static double double_deadband(double input, double deadband, DoubleUnaryOperator shaping_func) {
+        double shaped = shaping_func.applyAsDouble(input);
+        if (shaped <= deadband) {
+            return deadband;
+        }
+        return shaped;
     }
 
     public static Translation2d vector_deadband(Translation2d input, double deadband, double max_length, DoubleUnaryOperator shaping_func) {

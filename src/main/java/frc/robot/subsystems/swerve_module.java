@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.configs;
@@ -19,9 +18,9 @@ import frc.robot.configs.swerve.module_config;
 
 public class swerve_module {
     private final module_config config; 
-    private TalonFX drive;
-    private TalonFX turn; 
-    private DutyCycleEncoder abs;
+    private final TalonFX drive;
+    private final TalonFX turn; 
+    private final DutyCycleEncoder abs;
 
     public swerve_module(module_config config) {
         this.config = config;
@@ -36,7 +35,10 @@ public class swerve_module {
 
     public void apply_state(SwerveModuleState state) {
         state.optimize(get_turn_position());
-        drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
+        drive.set(state.speedMetersPerSecond / 4.3);
+        //no longer use pid velocity voltage because it's complicated to tune
+        //TODO: fix units conversion issues ...
+        //drive.setControl(new VelocityVoltage(Units.radiansToRotations(state.speedMetersPerSecond / constants.swerve.wheel_radius)));
         turn.setControl(new PositionVoltage(state.angle.getRotations()));
     } 
 

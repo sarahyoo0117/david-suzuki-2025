@@ -1,5 +1,6 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.FeetPerSecond;
 import static edu.wpi.first.units.Units.Inches;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 
 public class constants {
@@ -24,7 +26,7 @@ public class constants {
     public final class elevator {
         public static enum elevator_state {
             MANUAL(Meters.of(0)),
-            HOME(Meters.of(0.0)),
+            HOME(Meters.of(0.03)),
             L1(Meters.of(0.48)),
             L2(Inches.of(0.8)),
             L3(Meters.of(1.2)),
@@ -39,6 +41,23 @@ public class constants {
                 this.height = height;
             }
         }
+    }
+
+    public final class end_effector {
+        public static final AngularVelocity intake_coral = RotationsPerSecond.of(-17); 
+        public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
+        public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
+        public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
+        public static final Angle pivot_score_coral_L1 = Degrees.of(-28); 
+        public static final Angle pivot_intake_algae = Degrees.of(21); 
+        public static final Angle pivot_zero = Degrees.of(100); 
+        public static final Angle pivot_fully_down = Degrees.of(0); 
+        public static final Current hold_algae_current = Amps.of(50);
+    }
+
+    public final class ramp {
+        public static final AngularVelocity intake_coral = RotationsPerSecond.of(18); 
+        public static final AngularVelocity unjam_coral = RotationsPerSecond.of(-5); 
     }
 
     public final class swerve {
@@ -62,20 +81,5 @@ public class constants {
             module_offsets[2],
             module_offsets[3]
         );
-    }
-
-    public final class ramp {
-        public static final AngularVelocity intake_coral = RotationsPerSecond.of(8); 
-        public static final AngularVelocity unjam_coral = RotationsPerSecond.of(-1); 
-    }
-
-    public final class end_effector {
-        public static final AngularVelocity intake_manual = RotationsPerSecond.of(8); 
-        public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
-        public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
-        public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
-        public static final Angle score_coral_L1_pivot = Degrees.of(-28); 
-        public static final Angle pivot_zero = Degrees.of(100); 
-        public static final Angle pivot_fully_down = Degrees.of(0); 
     }
 }

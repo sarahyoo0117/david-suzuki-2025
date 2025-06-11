@@ -17,10 +17,10 @@ public class robot extends TimedRobot {
   public final boolean is_comp = false;
 
   public robot() {
-    swerve = new swerve(this);
     elevator = new elevator();
     ramp = new ramp();
     end_effector = new end_effector();
+    swerve = new swerve(this);
     bindings = new bindings(this);
   }
 

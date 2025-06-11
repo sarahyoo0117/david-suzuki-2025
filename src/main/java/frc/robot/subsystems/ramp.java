@@ -16,8 +16,9 @@ public class ramp extends SubsystemBase {
     private final TalonFX roller = new TalonFX(configs.can_ramp_roller.id, configs.can_ramp_roller.canbus); 
     private final DigitalInput lidar_edge = new DigitalInput(configs.ramp_lidar_edge);
     private final DigitalInput lidar_middle = new DigitalInput(configs.ramp_lidar_middle);
-    private VelocityVoltage velocity_output_req = new VelocityVoltage(0);
 
+    private VelocityVoltage velocity_output_req = new VelocityVoltage(0);
+    
     public boolean coral_seated() {
         return lidar_edge.get() && lidar_middle.get(); 
     }

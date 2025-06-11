@@ -44,8 +44,8 @@ public final class bindings {
     var ctrl_auto_align_right = oi.cmd_driver.start();
     var ctrl_intake_algae = oi.cmd_driver.leftTrigger();
     var ctrl_intake_coral = oi.cmd_driver.rightTrigger();
-    var ctrl_spit = oi.cmd_driver.rightBumper();
     var ctrl_prescore = oi.cmd_driver.leftBumper();
+    var ctrl_spit = oi.cmd_driver.rightBumper();
     //can climb only all elevator buttons are pressed lol
     var ctrl_climb_prep = ctrl_elevator_to_b.and(ctrl_elevator_to_a).and(ctrl_elevator_to_x).and(ctrl_elevator_to_y);
     //TODO: add ctrl_uppies and ctrl_tap when climb is prepped

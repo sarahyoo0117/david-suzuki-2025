@@ -115,11 +115,14 @@ public class configs {
 
         public static final TalonFXConfiguration drive_config(InvertedValue inverted) {
             return new TalonFXConfiguration()
+                /*
                 .withSlot0(
                     new Slot0Configs()
                     .withKP(0.0)
                     .withKV(0.4)
                 )
+                * 
+                */
                 .withMotorOutput(
                     new MotorOutputConfigs()
                     .withInverted(inverted)
