@@ -19,65 +19,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 public class configs {
-    public static final class LL {
-        public final String name;
-        public final Translation3d mounted_offset;
-        public final Rotation2d mounted_angle;
-        public LL(String name, Rotation2d mounted_angle, Translation3d mounted_offset) {
-            this.name = name;
-            this.mounted_angle = mounted_angle;
-            this.mounted_offset = mounted_offset;
-        }
-    }
-
-    public static final class can {
-        public String canbus;    
-        public int id;
-        public can(int id, String canbus) {
-            this.id = id;
-            this.canbus = canbus;
-        } 
-    }
-
-    public static final double pole_spacing_m = Units.inchesToMeters(13);
-    public static final double ll_up_m = Units.inchesToMeters(6.75);
-    public static final double ll_forward_m = Units.inchesToMeters(10);
-    public static final Rotation2d ll_mounted_angle = Rotation2d.fromDegrees(31);
-    public static final LL ll_left = new LL("limelight-left", ll_mounted_angle, new Translation3d(ll_forward_m, pole_spacing_m/2.0, ll_up_m));
-    public static final LL ll_right = new LL("limelight-right", ll_mounted_angle, new Translation3d(ll_forward_m, -pole_spacing_m/2.0, ll_up_m));
-
-    public static final String canbus = "canivore";        
-    public static final String canbus_rio = "rio";
-
-    public static final can can_swerve_fr_drive = new can(8, canbus); 
-    public static final can can_swerve_fr_turn = new can(9, canbus); 
-    public static final int dio_swerve_fr_abs = 7;
-
-    public static final can can_swerve_fl_drive = new can(6, canbus); 
-    public static final can can_swerve_fl_turn = new can(3, canbus); 
-    public static final int dio_swerve_fl_abs = 6;
-
-    public static final can can_swerve_br_drive = new can(2, canbus); 
-    public static final can can_swerve_br_turn = new can(4, canbus); 
-    public static final int dio_swerve_br_abs = 9;
-
-    public static final can can_swerve_bl_drive = new can(7, canbus); 
-    public static final can can_swerve_bl_turn = new can(5, canbus); 
-    public static final int dio_swerve_bl_abs = 8;
-    
-    public static final can can_pigeon = new can(10, canbus);
-
-    public static final can can_elevator_motor_left = new can(12, canbus);
-    public static final can can_elevator_motor_right = new can(13, canbus);
-
-    public static final can can_end_effector_roller = new can(16, canbus_rio);
-    public static final can can_end_effector_pivot = new can(15, canbus_rio);
-    public static final int end_effector_lidar = 5;
-
-    public static final can can_ramp_roller = new can(14, canbus_rio);
-    public static final int ramp_lidar_edge = 4;
-    public static final int ramp_lidar_middle = 3;
-
     public final class swerve {
         public static final class module_config {
             public final can can_drive;
@@ -205,4 +146,63 @@ public class configs {
             );
         }
     }
+    public static final class LL {
+        public final String name;
+        public final Translation3d mounted_offset;
+        public final Rotation2d mounted_angle;
+        public LL(String name, Rotation2d mounted_angle, Translation3d mounted_offset) {
+            this.name = name;
+            this.mounted_angle = mounted_angle;
+            this.mounted_offset = mounted_offset;
+        }
+    }
+
+    public static final class can {
+        public String canbus;    
+        public int id;
+        public can(int id, String canbus) {
+            this.id = id;
+            this.canbus = canbus;
+        } 
+    }
+
+    public static final double pole_spacing_m = Units.inchesToMeters(13);
+    public static final double ll_up_m = Units.inchesToMeters(6.75);
+    public static final double ll_forward_m = Units.inchesToMeters(10);
+    public static final Rotation2d ll_mounted_angle = Rotation2d.fromDegrees(31);
+    public static final LL ll_left = new LL("limelight-left", ll_mounted_angle, new Translation3d(ll_forward_m, pole_spacing_m/2.0, ll_up_m));
+    public static final LL ll_right = new LL("limelight-right", ll_mounted_angle, new Translation3d(ll_forward_m, -pole_spacing_m/2.0, ll_up_m));
+
+    public static final String canbus = "canivore";        
+    public static final String canbus_rio = "rio";
+
+    public static final can can_swerve_fr_drive = new can(8, canbus); 
+    public static final can can_swerve_fr_turn = new can(9, canbus); 
+    public static final int dio_swerve_fr_abs = 7;
+
+    public static final can can_swerve_fl_drive = new can(6, canbus); 
+    public static final can can_swerve_fl_turn = new can(3, canbus); 
+    public static final int dio_swerve_fl_abs = 6;
+
+    public static final can can_swerve_br_drive = new can(2, canbus); 
+    public static final can can_swerve_br_turn = new can(4, canbus); 
+    public static final int dio_swerve_br_abs = 9;
+
+    public static final can can_swerve_bl_drive = new can(7, canbus); 
+    public static final can can_swerve_bl_turn = new can(5, canbus); 
+    public static final int dio_swerve_bl_abs = 8;
+    
+    public static final can can_pigeon = new can(10, canbus);
+
+    public static final can can_elevator_motor_left = new can(12, canbus);
+    public static final can can_elevator_motor_right = new can(13, canbus);
+
+    public static final can can_end_effector_roller = new can(16, canbus_rio);
+    public static final can can_end_effector_pivot = new can(15, canbus_rio);
+    public static final int end_effector_lidar = 5;
+
+    public static final can can_ramp_roller = new can(14, canbus_rio);
+    public static final int ramp_lidar_edge = 4;
+    public static final int ramp_lidar_middle = 3;
+
 }
