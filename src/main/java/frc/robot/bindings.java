@@ -71,8 +71,14 @@ public final class bindings {
     ctrl_auto_align_left.or(ctrl_auto_align_right).onTrue(robot.swerve.auto_align());
     ctrl_intake_algae.onTrue(commands.intake_algae(robot.end_effector, robot.elevator));
     ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector, robot.elevator));
-    ctrl_prescore.onTrue(commands.prescore(robot.end_effector, robot.elevator));
-    ctrl_spit.onTrue(robot.end_effector.cmd_spit());
+
+    ctrl_auto_align_left.onTrue(robot.swerve.strafe_to_visible_tag(configs.ll_left, 4.0, 0.01));
+
+    ctrl_prescore.onTrue(Commands.deferredProxy(() -> commands.prescore(robot.end_effector, robot.elevator)));
+    ctrl_prescore.onFalse(Commands.deferredProxy(() -> robot.elevator.cmd_hold_state(elevator_state.HOME).alongWith(robot.end_effector.cmd_zero_pos_and_speed())));
+
+    ctrl_spit.onTrue(robot.end_effector.cmd_spit().andThen(Commands.idle(robot.end_effector)));
+    ctrl_spit.onFalse(robot.end_effector.cmd_zero_pos_and_speed());
 
     //binds commands to xkeys
     /* TODO: try this without ctrl_cease_manual

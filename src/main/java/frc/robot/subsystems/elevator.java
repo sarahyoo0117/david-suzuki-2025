@@ -77,6 +77,10 @@ public class elevator extends SubsystemBase {
         return Meters.of(motor_left.getPosition().getValueAsDouble());
     }
 
+    public boolean height_at_target(elevator_state target) {
+        return get_height() == target.height;
+    }
+
     public Command cmd_manual(Supplier<Integer> height_speed) {
         return Commands.runOnce(() -> {
             target_state = elevator_state.MANUAL;
@@ -101,7 +105,7 @@ public class elevator extends SubsystemBase {
         return cmd_set_state(state).andThen(Commands.idle(this));
     }
 
-    public Command cmd_deferred_proxy_hold_state(elevator_state state) {
-        return Commands.deferredProxy(() -> cmd_hold_state(state));
+    public Command cmd_deferred_proxy_set_state(elevator_state state) {
+        return Commands.deferredProxy(() -> cmd_set_state(state));
     }
 }

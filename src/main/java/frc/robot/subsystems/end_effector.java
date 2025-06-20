@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -28,7 +29,9 @@ import java.util.function.Supplier;
 public class end_effector extends SubsystemBase {
     private final TalonFX roller = new TalonFX(configs.can_end_effector_roller.id, configs.can_end_effector_roller.canbus); 
     private final TalonFX pivot = new TalonFX(configs.can_end_effector_pivot.id, configs.can_end_effector_pivot.canbus);
-    private DigitalInput lidar = new DigitalInput(configs.end_effector_lidar);
+    private final DigitalInput lidar = new DigitalInput(configs.end_effector_lidar);
+    private final Debouncer lidar_debouncer = new Debouncer(0.03);
+    private boolean lidar_sees_coral = false;
 
     private VelocityVoltage roller_velocity_request = new VelocityVoltage(0);
     private MotionMagicVoltage pivot_position_request = new MotionMagicVoltage(0); 
@@ -43,7 +46,6 @@ public class end_effector extends SubsystemBase {
         setDefaultCommand(Commands.run(() -> {
             switch (last_gamepiece) {
                 case CORAL:
-                    set_pivot(pivot_zero);
                     set_feed(RotationsPerSecond.of(0));
                     break;
                 case ALGAE:
@@ -55,6 +57,7 @@ public class end_effector extends SubsystemBase {
 
     @Override
     public void periodic() {
+        lidar_sees_coral = lidar_debouncer.calculate(lidar_sees_coral_raw());
         SmartDashboard.putNumber("end_effector_pivot", pivot.getPosition().getValue().in(Degrees));
         SmartDashboard.putBoolean("lidar-sees-coral", lidar_sees_coral());
     }
@@ -64,8 +67,12 @@ public class end_effector extends SubsystemBase {
         elevator.sim.update_wrist_angle(pivot_position_request.getPositionMeasure(), pivot_position_request.getPositionMeasure());
     }
 
-    public boolean lidar_sees_coral() {
+    public boolean lidar_sees_coral_raw() {
         return !lidar.get(); 
+    }
+
+    public boolean lidar_sees_coral() {
+        return lidar_sees_coral;
     }
 
     public Angle get_pivot() {
@@ -112,6 +119,13 @@ public class end_effector extends SubsystemBase {
     public Command cmd_zero() {
         return Commands.runOnce(() -> {
             zero();
+        }, this);
+    }
+
+    public Command cmd_zero_pos_and_speed() {
+        return Commands.runOnce(() -> {
+            set_pivot(pivot_zero);
+            set_feed(RotationsPerSecond.of(0));
         }, this);
     }
 

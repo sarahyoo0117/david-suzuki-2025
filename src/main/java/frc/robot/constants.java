@@ -44,10 +44,11 @@ public class constants {
     }
 
     public final class end_effector {
-        public static final AngularVelocity intake_coral = RotationsPerSecond.of(-18); 
+        public static final AngularVelocity intake_precise = RotationsPerSecond.of(-18); 
+        public static final AngularVelocity intake_coral = RotationsPerSecond.of(-30); 
         public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
         public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
-        public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
+        public static final AngularVelocity spit_coral = RotationsPerSecond.of(-20);
         public static final Angle pivot_score_coral_L1 = Degrees.of(-28); 
         public static final Angle pivot_intake_algae = Degrees.of(21); 
         public static final Angle pivot_zero = Degrees.of(100); 
@@ -56,8 +57,10 @@ public class constants {
     }
 
     public final class ramp {
-        public static final AngularVelocity intake_coral = RotationsPerSecond.of(18); 
-        public static final AngularVelocity unjam_coral = RotationsPerSecond.of(-5); 
+        public static final AngularVelocity idle = RotationsPerSecond.of(15); 
+        public static final AngularVelocity intake = RotationsPerSecond.of(18);
+        public static final AngularVelocity pre_intake = RotationsPerSecond.of(6);  
+        public static final AngularVelocity fast = RotationsPerSecond.of(30); 
     }
 
     public final class swerve {
