@@ -44,7 +44,7 @@ public class constants {
     }
 
     public final class end_effector {
-        public static final AngularVelocity intake_coral = RotationsPerSecond.of(-17); 
+        public static final AngularVelocity intake_coral = RotationsPerSecond.of(-18); 
         public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
         public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
         public static final AngularVelocity spit_coral = RotationsPerSecond.of(30);
