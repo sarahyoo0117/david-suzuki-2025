@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.bindings;
 import frc.robot.configs;
+import frc.robot.constants;
 import frc.robot.constants.elevator.elevator_state;
 
 import static frc.robot.constants.end_effector.*;
@@ -60,6 +61,7 @@ public class end_effector extends SubsystemBase {
         lidar_sees_coral = lidar_debouncer.calculate(lidar_sees_coral_raw());
         SmartDashboard.putNumber("end_effector_pivot", pivot.getPosition().getValue().in(Degrees));
         SmartDashboard.putBoolean("lidar-sees-coral", lidar_sees_coral());
+        SmartDashboard.putBoolean("cmd_triggered", cmd_triggered);
     }
     
     @Override
@@ -137,11 +139,25 @@ public class end_effector extends SubsystemBase {
                     set_feed(intake_coral); 
                     break;
                 case ALGAE:
-                    set_pivot(pivot_intake_algae);
+                    if (bindings.elevator_height_to_intake_algae == elevator_state.ALGAE_REEF1 || bindings.elevator_height_to_intake_algae == elevator_state.ALGAE_REEF2) {
+                        set_pivot(pivot_intake_algae_reef);
+                    } else {
+                        set_pivot(pivot_intake_algae_ground);
+                    }
                     set_feed(intake_algae);
                     break;
             }
         }, this);
+    }
+
+    boolean cmd_triggered = false;
+    public Command cmd_intake_with_lidar() {
+        return Commands.run(() -> {
+            set_feed(constants.end_effector.intake_precise);
+            last_gamepiece = gamepiece.CORAL;
+            cmd_triggered = true;
+        }, this)
+        .until(() -> !lidar_sees_coral_raw());
     }
 
     public Command cmd_spit() {

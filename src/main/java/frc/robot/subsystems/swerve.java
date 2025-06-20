@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.constants.tags;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -35,10 +37,13 @@ public class swerve extends swerve_lowlevel {
     public swerve(robot robot) {
         this.robot = robot;
     }
-
+    Translation2d tag = new Translation2d();
     @Override
     public void periodic() {
         super.periodic();
+        tag = math_utils.tag_trans2d(configs.ll_left);
+        SmartDashboard.putNumber("tag_x", tag.getX());
+        SmartDashboard.putNumber("tag_y", tag.getY());
         //test_catch_reef_id();
     }
 
@@ -46,7 +51,7 @@ public class swerve extends swerve_lowlevel {
     public Command auto_align() {
         if (robot.is_comp) {
             Translation2d tag_pos = tags.getTagPose(reef_assist_tag_id).get().getTranslation().toTranslation2d();
-            return strafe_to_point(tag_pos, 2.0, 1.0) 
+            return strafe_to_point(() -> tag_pos, 2.0, 1.0) 
             .until(() -> is_close_to_reef());
         } 
         return strafe_to_any_close_tag();
@@ -54,14 +59,14 @@ public class swerve extends swerve_lowlevel {
 
     public Command strafe_to_any_close_tag() {
         Translation2d pos = get_pose2d().getTranslation();
-        return Commands.run(() -> {
+        return Commands.runOnce(() -> {
             Translation2d left = pos;
             Translation2d right = pos;
             if (LimelightHelpers.getTV(configs.ll_left.name)) {
-                left = math_utils.tag_trans2d(configs.ll_left);
+                left = math_utils.tag_trans2d(configs.ll_left).plus(pos);
             }
             if (LimelightHelpers.getTV(configs.ll_right.name)) {
-                right = math_utils.tag_trans2d(configs.ll_right);
+                right = math_utils.tag_trans2d(configs.ll_right).plus(pos);
             }
             if (pos.getDistance(left) > pos.getDistance(right)) {
                 reef_assist_tag_pos = right;
@@ -69,7 +74,7 @@ public class swerve extends swerve_lowlevel {
                 reef_assist_tag_pos = left;
             }
         })
-        .andThen(strafe_to_point(reef_assist_tag_pos, 2.0, 0.1));
+        .andThen(strafe_to_point(() -> reef_assist_tag_pos, 2.0, 0.1));
     }
 
     public void test_catch_reef_id() {
@@ -114,24 +119,26 @@ public class swerve extends swerve_lowlevel {
         return tag_pos.plus(tag_offset).getDistance(get_pose2d().getTranslation()) < 0.8;
     }
 
-    public Command strafe_to_point(Translation2d point, double max_speed, double tolerance) {
+    public Command strafe_to_point(Supplier<Translation2d> point_sup, double max_speed, double tolerance) {
         return set_speeds(() -> {
+            var point = point_sup.get();
             Translation2d error = point.minus(get_pose2d().getTranslation());
             double error_len = error.getNorm();
             double x_speed = MathUtil.clamp(x_pid.calculate(error_len), -max_speed, max_speed);
-            if (x_speed < 0.02) {
+            SmartDashboard.putNumber("x_speed", x_speed);
+            if (Math.abs(x_speed) < 0.02) {
                 x_speed = 0;
             }
-            Translation2d output = error.div((error_len == 0) ? 1 : error_len).times(x_speed);
-            return ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(output.getX(), output.getY(), 0), get_heading());
+            Translation2d output = error.div((error_len == 0) ? 1 : -error_len).times(x_speed);
+            return ChassisSpeeds.fromRobotRelativeSpeeds(new ChassisSpeeds(output.getX(), output.getY(), 0), get_heading());
         })
-        .until(() -> point.minus(get_pose2d().getTranslation()).getNorm() <= tolerance);
+        .until(() -> point_sup.get().minus(get_pose2d().getTranslation()).getNorm() <= tolerance);
     }
 
     public Command strafe_to_visible_tag(LL ll, double max_speed, double tolerance) {
         if (LimelightHelpers.getTV(ll.name)) {
             Translation2d tag_point = math_utils.tag_trans2d(ll);
-            return strafe_to_point(tag_point, max_speed, tolerance);
+            return strafe_to_point(() -> tag_point, max_speed, tolerance);
         }
         return Commands.none();
     }

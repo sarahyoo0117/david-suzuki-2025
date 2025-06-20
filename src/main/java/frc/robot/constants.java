@@ -32,8 +32,8 @@ public class constants {
             L3(Meters.of(1.2)),
             //TODO: set heights for elevator states 
             L4(Meters.of(1.5)),
-            ALGAE_REEF1(Meters.of(0.37)),
-            ALGAE_REEF2(Meters.of(0.85)),
+            ALGAE_REEF1(Meters.of(0.54)),
+            ALGAE_REEF2(Meters.of(0.93)),
             ALGAE_NET(Meters.of(1.2)),
             ALGAE_PROCESSOR(Meters.of(0.0));
             public final Distance height;
@@ -44,13 +44,14 @@ public class constants {
     }
 
     public final class end_effector {
-        public static final AngularVelocity intake_precise = RotationsPerSecond.of(-18); 
+        public static final AngularVelocity intake_precise = RotationsPerSecond.of(-30); 
         public static final AngularVelocity intake_coral = RotationsPerSecond.of(-30); 
         public static final AngularVelocity intake_algae = RotationsPerSecond.of(20); 
         public static final AngularVelocity spit_algae = RotationsPerSecond.of(-30);
         public static final AngularVelocity spit_coral = RotationsPerSecond.of(-20);
         public static final Angle pivot_score_coral_L1 = Degrees.of(-28); 
-        public static final Angle pivot_intake_algae = Degrees.of(21); 
+        public static final Angle pivot_intake_algae_ground = Degrees.of(21);
+        public static final Angle pivot_intake_algae_reef = Degrees.of(60);
         public static final Angle pivot_zero = Degrees.of(100); 
         public static final Angle pivot_fully_down = Degrees.of(0); 
         public static final Current hold_algae_current = Amps.of(50);

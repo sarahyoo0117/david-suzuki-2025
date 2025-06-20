@@ -41,13 +41,24 @@ public class commands {
     }
 
     //TODO: test and fix intake coral command
-    public static Command intake_coral(ramp ramp, end_effector end_effector, elevator elevator) {
+    /*
+     * 
+     public static Command intake_coral(ramp ramp, end_effector end_effector, elevator elevator) {
         return Commands.sequence(
-                ramp.cmd_set_roller_speed(constants.ramp.intake),
-                end_effector.cmd_intake(gamepiece.CORAL),
-                Commands.idle(ramp, end_effector).until(new Trigger(() -> end_effector.lidar_sees_coral()).debounce(0.08)),
-                end_effector.cmd_set_feed(constants.end_effector.intake_precise).until(() -> !end_effector.lidar_sees_coral_raw())
+            ramp.cmd_set_roller_speed(constants.ramp.intake),
+            end_effector.cmd_intake(gamepiece.CORAL),
+            Commands.idle(ramp, end_effector).until(new Trigger(() -> end_effector.lidar_sees_coral()).debounce(0.08)),
+            end_effector.cmd_set_feed(constants.end_effector.intake_precise).until(() -> !end_effector.lidar_sees_coral_raw())
             );
+        }
+    */
+        
+    public static Command intake_coral(ramp ramp, end_effector end_effector, elevator elevator) {
+        return elevator.cmd_set_state(elevator_state.HOME)
+            .andThen(Commands.run(() -> {
+                ramp.set_roller_speed(constants.ramp.intake);
+                end_effector.set_feed(constants.end_effector.intake_coral);
+            }, ramp, end_effector));
     }
 
     public static Command prescore(end_effector end_effector, elevator elevator) {

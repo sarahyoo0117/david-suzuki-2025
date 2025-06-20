@@ -5,10 +5,12 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.elevator.elevator_state;
 import frc.robot.commands.commands;
 
 import frc.robot.oi.shaping_chooser;
+import frc.robot.subsystems.end_effector.gamepiece;
 
 public final class bindings {
   //stragety: score coral -> get algae from reef -> score to net / processor
@@ -69,16 +71,19 @@ public final class bindings {
     ctrl_swerve_zero_abs.onTrue(robot.swerve.cmd_zero_abs());
     ctrl_swerve_zero_heading.onTrue(robot.swerve.cmd_zero_heading());
     ctrl_auto_align_left.or(ctrl_auto_align_right).onTrue(robot.swerve.auto_align());
-    ctrl_intake_algae.onTrue(commands.intake_algae(robot.end_effector, robot.elevator));
+    ctrl_intake_algae.onTrue(Commands.deferredProxy(() -> commands.intake_algae(robot.end_effector, robot.elevator)));
     ctrl_intake_coral.onTrue(commands.intake_coral(robot.ramp, robot.end_effector, robot.elevator));
 
-    ctrl_auto_align_left.onTrue(robot.swerve.strafe_to_visible_tag(configs.ll_left, 4.0, 0.01));
+   // ctrl_auto_align_left.onTrue(robot.swerve.strafe_to_point(() -> new Translation2d(1, 1), 4, 0.01));
+
 
     ctrl_prescore.onTrue(Commands.deferredProxy(() -> commands.prescore(robot.end_effector, robot.elevator)));
     ctrl_prescore.onFalse(Commands.deferredProxy(() -> robot.elevator.cmd_hold_state(elevator_state.HOME).alongWith(robot.end_effector.cmd_zero_pos_and_speed())));
 
     ctrl_spit.onTrue(robot.end_effector.cmd_spit().andThen(Commands.idle(robot.end_effector)));
     ctrl_spit.onFalse(robot.end_effector.cmd_zero_pos_and_speed());
+
+    new Trigger(() -> robot.end_effector.lidar_sees_coral()).onTrue(robot.end_effector.cmd_intake_with_lidar());
 
     //binds commands to xkeys
     /* TODO: try this without ctrl_cease_manual
